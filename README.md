@@ -27,6 +27,8 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
     <img src="https://img.shields.io/badge/Google_Sites-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Google Sites"/></a>
   <a href="https://www.canva.com/design/DAGi7slDL1Y/ITt9uGZoqL3QQN_6AGuAAg/edit?utm_content=DAGi7slDL1Y&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">
     <img src="https://img.shields.io/badge/Apresentação KickOff-a7532c?style=for-the-badge&logo=Canva&logoColor=white" alt="KickOff"/></a>
+    <a href="https://visita-brennand.atlassian.net/jira/software/projects/VB/boards/2?atlOrigin=eyJpIjoiYjM4YWQxYTY5YmU0NGVmYmE3OTkxYzljZTc3YjM2NTkiLCJwIjoiaiJ9">
+    <img src="https://img.shields.io/badge/Jira-0000ff?style=for-the-badge&logo=Jira&logoColor=white" alt="Jira"/></a>
 </div>
 
 ## 🚀 Funcionalidades Principais 
@@ -80,12 +82,6 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
 
 ## 📦 Entregas
 
-<details>
-<summary>🚀 SR1 (entrega 1)</summary>
-  <br/>
- </details>
+### 📄 Quadro Jira (Semana 4)
 
- <details>
-<summary>🚀 SR2 (entrega 2)</summary>
-  <br/>
- </details>
+![Quadro Jira](img/semana4_quadro.png)
