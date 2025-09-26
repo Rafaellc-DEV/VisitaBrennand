@@ -31,6 +31,10 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
     <img src="https://img.shields.io/badge/Jira-0000ff?style=for-the-badge&logo=Jira&logoColor=white" alt="Jira"/></a>
     <a href="https://www.canva.com/design/DAG0FgfShx0/rdwNWd089Bb1cmDjb7P6Eg/edit?utm_content=DAG0FgfShx0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">
     <img src="https://img.shields.io/badge/Análise SWOT-9d00ff?style=for-the-badge&logo=Canva&logoColor=white" alt="Análise SWOT"/></a>
+    <a href="https://www.canva.com/design/DAGxgFQT2AY/W5hQfgIQoV-rSMUm5w2Mcg/edit?utm_content=DAGxgFQT2AY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">
+    <img src="https://img.shields.io/badge/PM Canvas- 9d00ff?style=for-the-badge&logo=Canva&logoColor=white" alt="PM Canvas"/></a>
+
+    
 </div>
 
 ## 🚀 Funcionalidades Principais 
@@ -101,7 +105,23 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
 ---
 
 <details>
+  <summary>Matriz CSD</summary>
+
+  ![MatrizCSD](img/MatrizCSD_Grupo03.png)
+</details>
+
+---
+
+<details>
   <summary>Análise SWOT (Atualizada)</summary>
 
-  ![Quadro Jira](img/SWOT_Grupo03_Atualizada.png)
+  ![SWOT](img/SWOT_Grupo03_Atualizada.png)
+</details>
+
+---
+
+<details>
+  <summary>PM Canvas (Atualizado)</summary>
+
+  ![PM Canvas](img\PMCanvasGrupo03.png)
 </details>
