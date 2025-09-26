@@ -29,6 +29,8 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
     <img src="https://img.shields.io/badge/Apresentação KickOff-a7532c?style=for-the-badge&logo=Canva&logoColor=white" alt="KickOff"/></a>
     <a href="https://visita-brennand.atlassian.net/jira/software/projects/VB/boards/2?atlOrigin=eyJpIjoiYjM4YWQxYTY5YmU0NGVmYmE3OTkxYzljZTc3YjM2NTkiLCJwIjoiaiJ9">
     <img src="https://img.shields.io/badge/Jira-0000ff?style=for-the-badge&logo=Jira&logoColor=white" alt="Jira"/></a>
+    <a href="https://www.canva.com/design/DAG0FgfShx0/rdwNWd089Bb1cmDjb7P6Eg/edit?utm_content=DAG0FgfShx0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">
+    <img src="https://img.shields.io/badge/Análise SWOT-9d00ff?style=for-the-badge&logo=Canva&logoColor=white" alt="Análise SWOT"/></a>
 </div>
 
 ## 🚀 Funcionalidades Principais 
@@ -82,6 +84,24 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
 
 ## 📦 Entregas
 
-### 📄 Quadro Jira (Semana 4)
+<details>
+  <summary>Quadro Jira (Semana 4)</summary>
 
-![Quadro Jira](img/semana4_quadro.png)
+  ![Quadro Jira](img/semana4_quadro.png)
+</details>
+
+---
+
+<details>
+  <summary>Quadro Jira (Semana 5)</summary>
+
+  ![Quadro Jira](img/semana4_quadro.png)
+</details>
+
+---
+
+<details>
+  <summary>Análise SWOT (Atualizada)</summary>
+
+  ![Quadro Jira](img/SWOT_Grupo03_Atualizada.png)
+</details>
