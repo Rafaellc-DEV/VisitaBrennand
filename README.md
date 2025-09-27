@@ -34,7 +34,7 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
     <a href="https://www.canva.com/design/DAGxgFQT2AY/W5hQfgIQoV-rSMUm5w2Mcg/edit?utm_content=DAGxgFQT2AY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">
     <img src="https://img.shields.io/badge/PM Canvas- 9d00ff?style=for-the-badge&logo=Canva&logoColor=white" alt="PM Canvas"/></a>
     <a href="https://www.figma.com/design/VQyARTSQKXkYFPiYtlxtTX/Visita_Brennand_prototipo?node-id=0-1&p=f&t=StJQ73ONAyIbrt4h-0">
-    <img src="https://img.shields.io/badge/PM Figma-9d4fff?style=for-the-badge&logo=Figma&logoColor=white" alt="Figma"/></a>
+    <img src="https://img.shields.io/badge/Figma-9d4fff?style=for-the-badge&logo=Figma&logoColor=white" alt="Figma"/></a>
 
     
 </div>
