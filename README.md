@@ -99,29 +99,8 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
 <details>
   <summary>Quadro Jira (Semana 5)</summary>
 
-  ![Quadro Jira](img/semana4_quadro.png)
+  ![Quadro Jira](img/semana5_quadro.png)
 </details>
 
 ---
 
-<details>
-  <summary>Matriz CSD</summary>
-
-  ![MatrizCSD](img/MatrizCSD_Grupo03.png)
-</details>
-
----
-
-<details>
-  <summary>Análise SWOT (Atualizada)</summary>
-
-  ![SWOT](img/SWOT_Grupo03_Atualizada.png)
-</details>
-
----
-
-<details>
-  <summary>PM Canvas (Atualizado)</summary>
-
-  ![PM Canvas](img\PMCanvasGrupo03.png)
-</details>
