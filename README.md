@@ -29,12 +29,11 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
     <img src="https://img.shields.io/badge/Apresentação KickOff-a7532c?style=for-the-badge&logo=Canva&logoColor=white" alt="KickOff"/></a>
     <a href="https://visita-brennand.atlassian.net/jira/software/projects/VB/boards/2?atlOrigin=eyJpIjoiYjM4YWQxYTY5YmU0NGVmYmE3OTkxYzljZTc3YjM2NTkiLCJwIjoiaiJ9">
     <img src="https://img.shields.io/badge/Jira-0000ff?style=for-the-badge&logo=Jira&logoColor=white" alt="Jira"/></a>
-    <a href="https://www.canva.com/design/DAG0FgfShx0/rdwNWd089Bb1cmDjb7P6Eg/edit?utm_content=DAG0FgfShx0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">
-    <img src="https://img.shields.io/badge/Análise SWOT-9d00ff?style=for-the-badge&logo=Canva&logoColor=white" alt="Análise SWOT"/></a>
-    <a href="https://www.canva.com/design/DAGxgFQT2AY/W5hQfgIQoV-rSMUm5w2Mcg/edit?utm_content=DAGxgFQT2AY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">
-    <img src="https://img.shields.io/badge/PM Canvas- 9d00ff?style=for-the-badge&logo=Canva&logoColor=white" alt="PM Canvas"/></a>
     <a href="https://www.figma.com/design/VQyARTSQKXkYFPiYtlxtTX/Visita_Brennand_prototipo?node-id=0-1&p=f&t=StJQ73ONAyIbrt4h-0">
-    <img src="https://img.shields.io/badge/Figma-9d4fff?style=for-the-badge&logo=Figma&logoColor=white" alt="Figma"/></a>
+    <img src="https://img.shields.io/badge/Figma-FF7262?style=for-the-badge&logo=Figma&logoColor=white" alt="Figma"/></a>
+    <a href="https://www.youtube.com/watch?v=JZMmBQAp4dw">
+    <img src="https://img.shields.io/badge/Screencast LowFi-b50404?style=for-the-badge&logo=youtube&logoColor=white"/>
+</a>
 
     
 </div>
