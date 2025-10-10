@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{home.titulo}">VISITA BRENNAND</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body{background:#d9d9d9;}
+        .card-soft{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:16px}
+        .pill{border:1px solid rgba(0,0,0,.15);border-radius:12px;padding:.35rem .65rem;background:#eee}
+        .star input{display:none}
+        .star label{font-size:1.2rem;cursor:pointer;color:#aaa}
+        .star input:checked ~ label, .star label:hover, .star label:hover ~ label{color:#000}
+    </style>
+</head>
+<body class="pb-5">
+
+<!-- topo + troca de idioma -->
+<header class="container py-3">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h4 class="mb-0" th:text="#{home.titulo}">VISITA BRENNAND</h4>
+            <small>LOGO</small>
+        </div>
+        <div>
+            <div class="dropdown">
+                <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <span th:text="#{home.idioma}">Idioma</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="?lang=pt">Português</a></li>
+                    <li><a class="dropdown-item" href="?lang=en">English</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container" style="max-width: 520px;">
+    <!-- Calendário simplificado (mock) -->
+    <section class="mb-3">
+        <div class="d-flex gap-2 flex-wrap">
+            <span class="pill">Sex. 25</span>
+            <span class="pill">Sáb. 26</span>
+            <span class="pill">Dom. 27</span>
+            <span class="pill bg-dark text-white">Seg. <span th:text="${#temporals.format(hoje,'dd')}">28</span> — HOJE</span>
+            <span class="pill">Ter. 29</span>
+            <span class="pill">Qua. 30</span>
+            <span class="pill">Qui. 01</span>
+        </div>
+    </section>
+
+    <!-- Avisos -->
+    <section class="mb-3 card-soft p-3">
+        <div class="text-center">
+            <div class="text-muted" th:text="${#temporals.format(hoje,'dd/MM/yyyy')}">28/09/2025</div>
+            <h5 class="my-2" th:if="${avisos != null and !#lists.isEmpty(avisos)}"
+                th:text="${avisos.get(0).texto}">Parque fechado hoje!</h5>
+            <h6 class="my-2 text-muted" th:if="${avisos == null or #lists.isEmpty(avisos)}"
+                th:text="#{home.nenhum_aviso}">Nenhum aviso disponível</h6>
+        </div>
+        <div class="mt-3">
+            <strong th:text="#{home.aviso}">AVISO</strong>
+            <p class="mb-0">Informamos que o parque estará fechado hoje em razão da maré alta, visando sua segurança. Agradecemos a compreensão.</p>
+        </div>
+    </section>
+
+    <!-- Horários -->
+    <section class="mb-3 card-soft p-3">
+        <strong th:text="#{home.horarios}">HORÁRIOS DE FUNCIONAMENTO</strong>
+        <p class="mb-0">Terça a Sexta-feira (09:00 às 16:00)</p>
+        <p class="mb-0">Sábado e Domingo (08:00 às 16:00)</p>
+    </section>
+
+    <!-- Regras -->
+    <section class="mb-3 card-soft p-3">
+        <strong th:text="#{home.regras}">REGRAS DE VISITAÇÃO</strong>
+        <ul class="mb-0">
+            <li>Crianças com responsáveis</li>
+            <li>Jogue lixo nas lixeiras</li>
+            <li>Proibido fumar</li>
+            <li>Sem drones</li>
+        </ul>
+    </section>
+
+    <div class="row g-3">
+        <!-- Feedback -->
+        <section class="col-12 col-lg-6 card-soft p-3">
+            <h6 class="mb-2" th:text="#{home.feedback}">AVALIE SUA EXPERIÊNCIA!</h6>
+            <form method="post" action="/feedback" th:object="${feedback}">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                <div class="star d-flex flex-row-reverse justify-content-end mb-2">
+                    <input type="radio" id="s5" name="nota" value="5"><label for="s5">★</label>
+                    <input type="radio" id="s4" name="nota" value="4"><label for="s4">★</label>
+                    <input type="radio" id="s3" name="nota" value="3"><label for="s3">★</label>
+                    <input type="radio" id="s2" name="nota" value="2"><label for="s2">★</label>
+                    <input type="radio" id="s1" name="nota" value="1" checked><label for="s1">★</label>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label" th:text="#{home.comentario}">Comentário:</label>
+                    <textarea th:field="*{comentario}" class="form-control" rows="3" placeholder="Conte rapidamente sua experiência"></textarea>
+                </div>
+                <button class="btn btn-dark w-100" type="submit" th:text="#{home.enviar}">ENVIAR</button>
+            </form>
+        </section>
+
+        <!-- Sugestão/Reclamação -->
+        <section class="col-12 col-lg-6 card-soft p-3">
+            <h6 class="mb-2">Sugestão / Reclamação</h6>
+            <form method="post" action="/sugestao" th:object="${sugestao}">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                <div class="mb-2">
+                    <select th:field="*{tipo}" class="form-select">
+                        <option th:value="SUGESTAO">Sugestão</option>
+                        <option th:value="RECLAMACAO">Reclamação</option>
+                    </select>
+                </div>
+                <div class="mb-2">
+                    <textarea th:field="*{texto}" class="form-control" rows="3" placeholder="Digite sua sugestão ou reclamação..."></textarea>
+                </div>
+                <button class="btn btn-dark w-100" type="submit" th:text="#{home.enviar}">ENVIAR</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- mensagens de sucesso/erro (via query param) -->
+    <div class="mt-3">
+        <div class="alert alert-success py-2" th:if="${ok}" th:text="#{${ok}}"></div>
+        <div class="alert alert-danger py-2" th:if="${erro}" th:text="#{${erro}}"></div>
+    </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
