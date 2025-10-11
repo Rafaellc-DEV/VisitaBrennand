@@ -1,4 +1,16 @@
+server:
+  port: 8080
+  # ADICIONE ESTA CONFIGURAÇÃO PARA FORÇAR UTF-8
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
 spring:
+  # O restante do arquivo continua igual
+  messages:
+    encoding: UTF-8
   datasource:
     url: jdbc:h2:mem:visita;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
     username: sa
@@ -12,5 +24,3 @@ spring:
     show-sql: true
   thymeleaf:
     cache: false
-server:
-  port: 8080
