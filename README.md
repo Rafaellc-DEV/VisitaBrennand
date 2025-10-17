@@ -27,12 +27,18 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
     <img src="https://img.shields.io/badge/Google_Sites-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Google Sites"/></a>
   <a href="https://www.canva.com/design/DAGi7slDL1Y/ITt9uGZoqL3QQN_6AGuAAg/edit?utm_content=DAGi7slDL1Y&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">
     <img src="https://img.shields.io/badge/Apresentação KickOff-a7532c?style=for-the-badge&logo=Canva&logoColor=white" alt="KickOff"/></a>
+  <a href="https://www.canva.com/design/DAGi7slDL1Y/ITt9uGZoqL3QQN_6AGuAAg/edit?utm_content=DAGi7slDL1Y&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">
+    <img src="https://img.shields.io/badge/Apresentação SR1-a7532c?style=for-the-badge&logo=Canva&logoColor=white" alt="SR1"/></a>
     <a href="https://visita-brennand.atlassian.net/jira/software/projects/VB/boards/2?atlOrigin=eyJpIjoiYjM4YWQxYTY5YmU0NGVmYmE3OTkxYzljZTc3YjM2NTkiLCJwIjoiaiJ9">
     <img src="https://img.shields.io/badge/Jira-0000ff?style=for-the-badge&logo=Jira&logoColor=white" alt="Jira"/></a>
     <a href="https://www.figma.com/design/VQyARTSQKXkYFPiYtlxtTX/Visita_Brennand_prototipo?node-id=0-1&p=f&t=StJQ73ONAyIbrt4h-0">
     <img src="https://img.shields.io/badge/Figma-FF7262?style=for-the-badge&logo=Figma&logoColor=white" alt="Figma"/></a>
     <a href="https://www.youtube.com/watch?v=JZMmBQAp4dw">
     <img src="https://img.shields.io/badge/Screencast LowFi-b50404?style=for-the-badge&logo=youtube&logoColor=white"/>
+    <a href="https://www.youtube.com/watch?v=JZMmBQAp4dw">
+    <img src="https://img.shields.io/badge/Screencast SR1-b50404?style=for-the-badge&logo=youtube&logoColor=white"/>
+
+      
 </a>
 
     
@@ -68,11 +74,25 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
 
 
 ## 🛠️ Tecnologias Utilizadas (Em desenvolvimento)
-- **Frontend**: Java Swing (interface gráfica) + Figma (protótipos de baixa fidelidade)  
-- **Backend**: Java (Programação Orientada a Objetos, arquitetura em camadas)  
-- **Banco de Dados**: H2 (em memória para testes) / PostgreSQL (persistência final)  
-- **Testes**: JUnit (testes automatizados)  
-- **Controle de Versão**: Git + GitHub (issues, fluxo de versionamento e entregas)  
+
+- **Frontend:**  
+  - Java **Swing** → Interface gráfica desktop  
+  - **Figma** → Protótipos de baixa fidelidade  
+
+- **Backend:**  
+  - **Java** → Programação Orientada a Objetos (POO)  
+  - Arquitetura em camadas (**Controller**, **Service**, **Repository**)  
+
+- **Banco de Dados:**  
+  - **H2** → Banco em memória para testes  
+  - **PostgreSQL** → Banco persistente para ambiente final  
+
+- **Testes:**  
+  - **JUnit** → Testes unitários e de integração automatizados  
+
+- **Controle de Versão:**  
+  - **Git** + **GitHub** → Controle de versão, issues, branches e fluxo de entregas
+
 
 ---
 
@@ -87,21 +107,7 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
 | Pedro Pessoa Bastos | Desenvolvedor Front End | [ppb2@cesar.school](mailto:ppb2@cesar.school) |
 | Rafael Lyra Costa | Desenvolvedor Full Stack | [rlc3@cesar.school](mailto:rlc3@cesar.school) |
 
-## 📦 Entregas
 
-<details>
-  <summary>Quadro Jira (Semana 4)</summary>
-
-  ![Quadro Jira](img/semana4_quadro.png)
-</details>
-
----
-
-<details>
-  <summary>Quadro Jira (Semana 5)</summary>
-
-  ![Quadro Jira](img/semana5_quadro.png)
-</details>
 
 ---
 
