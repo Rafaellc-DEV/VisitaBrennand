@@ -73,26 +73,14 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
   Visitantes podem mudar o idioma da aplicação (ex.: Português ↔ Inglês).  
 
 
-## 🛠️ Tecnologias Utilizadas (Em desenvolvimento)
+## 🛠️ Tecnologias Utilizadas
 
-- **Frontend:**  
-  - Java **Swing** → Interface gráfica desktop  
-  - **Figma** → Protótipos de baixa fidelidade  
-
-- **Backend:**  
-  - **Java** → Programação Orientada a Objetos (POO)  
-  - Arquitetura em camadas (**Controller**, **Service**, **Repository**)  
-
-- **Banco de Dados:**  
-  - **H2** → Banco em memória para testes  
-  - **PostgreSQL** → Banco persistente para ambiente final  
-
-- **Testes:**  
-  - **JUnit** → Testes unitários e de integração automatizados  
-
-- **Controle de Versão:**  
-  - **Git** + **GitHub** → Controle de versão, issues, branches e fluxo de entregas
-
+- **Backend:** Java 21 + Spring Boot (Web, Data JPA, Security, Validation)  
+- **Frontend:** Thymeleaf + Bootstrap 5.3.3 + Google Fonts (Inter)  
+- **Banco de Dados:** H2 (em memória para testes) / PostgreSQL (produção)  
+- **Testes:** JUnit (Spring Boot Starter Test)  
+- **Controle de Versão:** Git + GitHub  
+- **Ferramentas:** Maven, IntelliJ IDEA, Spring DevTools
 
 ---
 
