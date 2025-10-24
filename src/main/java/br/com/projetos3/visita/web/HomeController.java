@@ -69,18 +69,8 @@ public class HomeController {
         return "redirect:/";
     }
 
-    /* MÉTODO ENVIAR SUGESTAO REMOVIDO
-    @PostMapping("/sugestao")
-    public String enviarSugestao(@Valid @ModelAttribute("sugestao") Sugestao sugestao,
-                                 BindingResult br,
-                                 RedirectAttributes ra) {
-        if (br.hasErrors()) {
-            ra.addAttribute("erro","home.sugestao.erro");
-            return "redirect:/";
-        }
-        sugestaoService.salvar(sugestao);
-        ra.addAttribute("ok","home.sugestao.ok");
-        return "redirect:/";
+    @GetMapping("/login")
+    public String login() {
+        return "admin/login";
     }
-    */
 }
