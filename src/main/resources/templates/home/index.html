@@ -1,495 +1,345 @@
 <!DOCTYPE html>
-<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="#{home.titulo}">VISITA BRENNAND</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visita Brennand</title>
 
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
 
-    <style>
-        :root {
-          --color-brand: #294A5D;
-          --color-accent: #A7532C;
-          --color-text-primary: #1A202C;
-          --color-text-secondary: #718096;
-          --color-surface: #F7FAFC;
-          --color-background: #FFFFFF;
-          --color-border: #EDF2F7;
-          --color-success-bg: #F0FFF4;
-          --color-success-icon: #38A169;
-          --color-warning-bg: #FFFBEB;
-          --color-warning-icon: #D69E2E;
-        }
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: "Segoe UI", sans-serif;
+    }
 
-        body {
-          background-color: var(--color-surface);
-          font-family: 'Inter', system-ui, -apple-system, sans-serif;
-          color: var(--color-text-primary);
-          line-height: 1.6;
-          margin: 0;
-        }
+    header {
+      text-align: center;
+      background-color: #d9d9d9;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+    }
 
-        /* ===== Banner médio (ajustado p/ desktop) ===== */
-        .hero-bleed {
-          width: 100%;
-          height: clamp(280px, 40vh, 420px); /* antes: clamp(240px, 32vh, 360px) */
-          display: grid;
-          place-items: center;
-          overflow: hidden;
-          background: var(--color-surface);
-          position: relative;
-        }
+    .calendar {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-        .hero-bleed::before,
-        .hero-bleed::after {
-          content: "";
-          position: absolute;
-          left: 0;
-          right: 0;
-          height: 25px;
-          pointer-events: none;
-        }
+    .days-grid {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
 
-        .hero-bleed::before {
-          top: 0;
-          background: linear-gradient(to bottom, rgba(0, 0, 0, 0.08), transparent);
-        }
+    .day {
+      background-color: #eaeaea;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      min-width: 55px;
+      text-align: center;
+      color: #333;
+      user-select: none;
+    }
 
-        .hero-bleed::after {
-          bottom: 0;
-          background: linear-gradient(to top, rgba(0, 0, 0, 0.08), transparent);
-        }
+    .day.active {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+    }
 
-        .hero-bleed img {
-          max-width: 100%;
-          max-height: 100%;
-          width: auto;
-          height: auto;
-          object-fit: contain;   /* Mostra toda a imagem */
-          object-position: center;
-          display: block;
-        }
+    .feedback-container {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-        /* ===== Conteúdo principal ===== */
-        .wrap {
-          max-width: 1100px;
-          margin: auto;
-          padding: 2rem 1rem;
-        }
+    .error-msg {
+      color: red;
+      font-size: 0.9rem;
+    }
 
-        .card-ui {
-          background-color: var(--color-background);
-          border: 1px solid var(--color-border);
-          border-radius: 16px;
-          padding: 1.5rem;
-          margin-bottom: 1.5rem;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
-                      0 2px 4px -1px rgba(0, 0, 0, 0.03);
-        }
+    .success-msg {
+      color: green;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 1rem;
+    }
 
-        .section-title {
-          font-size: 1rem;
-          font-weight: 600;
-          color: var(--color-text-primary);
-          margin-bottom: 1rem;
-          padding-bottom: 1rem;
-          border-bottom: 1px solid var(--color-border);
-          display: block;
-        }
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 0.4rem;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
 
-        .status-banner {
-          display: flex;
-          align-items: flex-start;
-          gap: 1rem;
-          border-radius: 12px;
-          padding: 1.25rem;
-          border: 1px solid transparent;
-        }
+    .star {
+      color: #ccc;
+      transition: color 0.2s;
+    }
 
-        .status-banner__icon {
-          flex-shrink: 0;
-          width: 24px;
-          height: 24px;
-          margin-top: 2px;
-        }
+    .star.selected {
+      color: #ffcc00;
+    }
 
-        .status-banner__content p {
-          margin: 0;
-          color: var(--color-text-secondary);
-          font-size: 0.9rem;
-        }
+    textarea {
+      resize: none;
+    }
 
-        .status-banner__content strong {
-          color: var(--color-text-primary);
-        }
-
-        .status-banner--success {
-          background-color: var(--color-success-bg);
-          border-color: #C6F6D5;
-        }
-
-        .status-banner--warning {
-          background-color: var(--color-warning-bg);
-          border-color: #FEEBC8;
-        }
-
-        .calendar-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 1.5rem;
-        }
-
-        .calendar-pills {
-          display: flex;
-          gap: 0.5rem;
-          justify-content: center;
-          align-items: center;
-        }
-
-        .pill {
-          border: 1px solid var(--color-border);
-          border-radius: 10px;
-          padding: .5rem;
-          font-weight: 600;
-          text-align: center;
-          width: 55px;
-          cursor: pointer;
-          transition: all 0.2s ease-in-out;
-        }
-
-        .pill--today {
-          background-color: var(--color-brand);
-          color: #fff;
-          border-color: var(--color-brand);
-        }
-
-        .calendar-arrow {
-          font-size: 1.5rem;
-          color: var(--color-text-secondary);
-          cursor: pointer;
-          padding: 0 0.5rem;
-        }
-
-        .lang-switcher-container .dropdown-toggle {
-          background-color: var(--color-surface);
-          border-color: var(--color-border);
-        }
-
-        .lang-switcher-container img {
-          width: 20px;
-          border-radius: 2px;
-        }
-
-        .form-label {
-          font-size: 0.875rem;
-          font-weight: 500;
-        }
-
-        .form-control {
-          border-radius: 8px;
-          border-color: var(--color-border);
-        }
-
-        .form-control:focus {
-          border-color: var(--color-brand);
-          box-shadow: 0 0 0 3px rgba(41, 74, 93, .1);
-        }
-
-        .star input {
-          position: absolute;
-          opacity: 0;
-          width: 0;
-          height: 0;
-          pointer-events: none;
-        }
-
-        .star label {
-          font-size: 2rem;
-          color: #E2E8F0;
-          transition: color 0.2s;
-          cursor: pointer;
-        }
-
-        .star input:checked ~ label,
-        .star label:hover,
-        .star label:hover ~ label {
-          color: #FBBF24;
-        }
-
-        .btn-brand {
-          background-color: var(--color-accent);
-          border-color: var(--color-accent);
-          color: #fff;
-          font-weight: 600;
-          border-radius: 8px;
-          padding: 0.75rem 1.5rem;
-        }
-
-        .bottom-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1.5rem;
-        }
-
-        /* ===== Rodapé ===== */
-        .footer {
-          background-color: var(--color-brand);
-          color: #fff;
-          padding: 3rem 1rem;
-          margin-top: 2rem;
-        }
-
-        .footer a {
-          color: #E2E8F0;
-          text-decoration: none;
-          transition: color 0.2s;
-        }
-
-        .footer a:hover {
-          color: #fff;
-          text-decoration: underline;
-        }
-
-        .footer-logo {
-          max-width: 180px;
-          margin-bottom: 1.5rem;
-        }
-
-        .footer-section-title {
-          font-weight: 600;
-          margin-bottom: 1rem;
-          color: #fff;
-          font-size: 1.1rem;
-        }
-
-        .footer-links li {
-          margin-bottom: 0.5rem;
-        }
-
-        .social-icons a {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          background-color: rgba(255, 255, 255, 0.1);
-          margin-right: 0.5rem;
-        }
-
-        .social-icons a:hover {
-          background-color: var(--color-accent);
-          text-decoration: none;
-        }
-
-        .social-icons svg {
-          width: 20px;
-          height: 20px;
-        }
-
-        .footer-bottom {
-          border-top: 1px solid rgba(255, 255, 255, 0.2);
-          margin-top: 2rem;
-          padding-top: 2rem;
-          font-size: 0.875rem;
-          color: #A0AEC0;
-        }
-
-        @media (max-width: 768px) {
-          .wrap { padding: 1rem 0; }
-          .card-ui, .status-banner {
-            margin-bottom: 1rem;
-            border-radius: 0;
-            border-left: 0;
-            border-right: 0;
-          }
-          .calendar-header { flex-direction: column; align-items: stretch; gap: 1rem; }
-          .pill:nth-of-type(1), .pill:nth-of-type(7) { display: none; }
-          .bottom-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+    @media (max-width: 576px) {
+      .day {
+        min-width: 42px;
+        padding: 0.6rem;
+      }
+      .stars {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <header>
+    <h2>VISITA BRENNAND</h2>
+    <p>LOGO</p>
+  </header>
 
-<section class="hero-bleed" aria-label="Banner do parque">
-    <picture>
-        <source media="(max-width: 768px)" th:srcset="@{/img/banner_mobile.png}" srcset="/img/banner_mobile.png">
-        <img th:src="@{/img/banner_desktop.png}" src="/img/banner_desktop.png" alt="Banner Visita Brennand">
-    </picture>
-</section>
-
-<div class="wrap">
-    <main>
-        <section class="card-ui">
-            <div class="calendar-header">
-                <h5 class="fw-bold mb-0" th:text="${nomeMes}"></h5>
-                <div class="lang-switcher-container dropdown">
-                    <button class="btn dropdown-toggle btn-sm d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <th:block th:if="${#locale.language == 'en'}">
-                            <img src="https://flagcdn.com/w20/us.png" alt="USA Flag" class="me-2"><span>English</span>
-                        </th:block>
-                        <th:block th:unless="${#locale.language == 'en'}">
-                            <img src="https://flagcdn.com/w20/br.png" alt="Bandeira do Brasil" class="me-2"><span>Português</span>
-                        </th:block>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item d-flex align-items-center" href="?lang=pt"><img src="https://flagcdn.com/w20/br.png" class="me-2" alt=""><span>Português</span></a></li>
-                        <li><a class="dropdown-item d-flex align-items-center" href="?lang=en"><img src="https://flagcdn.com/w20/us.png" class="me-2" alt=""><span>English</span></a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="calendar-pills">
-                <span class="calendar-arrow" aria-label="Anterior">&lt;</span>
-                <th:block th:each="dia : ${dias}">
-                    <div th:class="${dia.isEqual(hoje)} ? 'pill pill--today' : 'pill'">
-                        <div class="small" th:text="${#strings.capitalize(#temporals.format(dia, 'E', #locale.forLanguageTag('pt-BR')))}"></div>
-                        <strong class="fs-5" th:text="${#temporals.format(dia, 'dd')}"></strong>
-                        <div th:if="${dia.isEqual(hoje)}" class="small" style="font-weight:500;font-size:.65rem;margin-top:2px;">HOJE</div>
-                    </div>
-                </th:block>
-                <span class="calendar-arrow" aria-label="Próximo">&gt;</span>
-            </div>
-        </section>
-
-        <div th:if="${!#lists.isEmpty(avisos)}" class="status-banner status-banner--warning">
-            <div class="status-banner__icon">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                </svg>
-            </div>
-            <div class="status-banner__content">
-                <strong th:utext="${avisos.get(0).texto}"></strong>
-                <p class="mt-1">O funcionamento do parque foi alterado. Por favor, leia o aviso.</p>
-            </div>
-        </div>
-
-        <div th:if="${#lists.isEmpty(avisos)}" class="status-banner status-banner--success">
-            <div class="status-banner__icon">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-            </div>
-            <div class="status-banner__content">
-                <strong>Parque Aberto</strong>
-                <p th:text="#{home.aviso.parque_aberto}"></p>
-            </div>
-        </div>
-
-        <section class="card-ui">
-            <h5 class="section-title" th:text="#{home.horarios}"></h5>
-            <div class="row">
-                <div class="col-sm-6">
-                    <p class="mb-1"><strong>Terça a Sexta-feira</strong><br><span class="text-muted">(09:00 às 16:00)</span></p>
-                </div>
-                <div class="col-sm-6">
-                    <p class="mb-0"><strong>Sábado e Domingo</strong><br><span class="text-muted">(08:00 às 16:00)</span></p>
-                </div>
-            </div>
-        </section>
-
-        <section class="bottom-grid">
-            <div class="card-ui">
-                <h5 class="section-title" th:text="#{home.regras}"></h5>
-                <ul class="mb-0 ps-3 text-secondary">
-                    <li>Crianças com responsáveis</li>
-                    <li>Jogue lixo nas lixeiras</li>
-                    <li>Proibido fumar</li>
-                    <li>Sem drones</li>
-                </ul>
-            </div>
-
-            <div class="card-ui">
-                <form method="post" th:action="@{/feedback}" th:object="${feedback}">
-                    <h5 class="section-title text-center" th:text="#{home.feedback}"></h5>
-                    <input th:if="${_csrf}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    <div class="star d-flex flex-row-reverse justify-content-center mb-3">
-                        <input type="radio" id="s5" name="nota" value="5" required/><label for="s5">★</label>
-                        <input type="radio" id="s4" name="nota" value="4"/><label for="s4">★</label>
-                        <input type="radio" id="s3" name="nota" value="3"/><label for="s3">★</label>
-                        <input type="radio" id="s2" name="nota" value="2"/><label for="s2">★</label>
-                        <input type="radio" id="s1" name="nota" value="1"/><label for="s1">★</label>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="fb-coment" th:text="#{home.comentario}"></label>
-                        <textarea id="fb-coment" th:field="*{comentario}" class="form-control" rows="4" placeholder="Deixe seu comentário..." required></textarea>
-                    </div>
-                    <button class="btn btn-brand w-100" type="submit" th:text="#{home.enviar}"></button>
-                </form>
-            </div>
-        </section>
-
-        <div class="mt-3">
-            <div class="alert alert-success" th:if="${ok}" th:text="#{${ok}}" role="alert"></div>
-            <div class="alert alert-danger" th:if="${erro}" th:text="#{${erro}}" role="alert"></div>
-        </div>
-    </main>
-</div>
-
-<footer class="footer">
-    <div class="container">
-        <div class="row">
-
-            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
-                <h5 class="footer-section-title">Visita Brennand</h5>
-                <p class="small text-white-50">Uma nova experiência de visitação no Parque de Esculturas Francisco Brennand.</p>
-                <div class="social-icons mt-3">
-                    <a href="#" aria-label="Instagram">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
-                            <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.703.01 5.556 0 5.829 0 8s.01 2.444.048 3.297c.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.556 15.99 5.829 16 8 16s2.444-.01 3.297-.048c.852-.04 1.433-.174 1.942-.372.526-.205.972-.478 1.417-.923.445-.444.718-.891.923-1.417.198-.509.333-1.09.372-1.942C15.99 10.444 16 10.171 16 8s-.01-2.444-.048-3.297c-.04-.852-.174-1.433-.372-1.942a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.09-.333-1.942-.372C10.444.01 10.171 0 8 0zm0 1.442c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.282.24.705.275 1.486.039.843.047 1.096.047 3.232s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.598.92c-.28.28-.546.453-.92.598-.282.11-.705.24-1.485.276-.843.038-1.096.047-3.232.047s-2.389-.009-3.232-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.598-.92c-.11-.282-.24-.705-.276-1.485C1.442 10.444 1.434 10.17 1.434 8s.008-2.389.047-3.232c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276C5.611 1.449 5.864 1.442 8 1.442zM8 4.202a3.798 3.798 0 1 0 0 7.596 3.798 3.798 0 0 0 0-7.596zM8 10.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm5.438-6.362a.938.938 0 1 1-1.876 0 .938.938 0 0 1 1.876 0z"/>
-                        </svg>
-                    </a>
-                    <a href="#" aria-label="Facebook">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
-                            <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0 0 3.603 0 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
-                <h5 class="footer-section-title">Navegação</h5>
-                <ul class="list-unstyled footer-links">
-                    <li><a href="#">Início</a></li>
-                    <li><a href="#">Horários</a></li>
-                    <li><a href="#">Regras</a></li>
-                    <li><a href="#">Avalie-nos</a></li>
-                </ul>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-                <h5 class="footer-section-title">Contato</h5>
-                <ul class="list-unstyled footer-links small">
-                    <li>Parque de Esculturas Francisco Brennand</li>
-                    <li>Av. Brasília, s/n - Brasília Teimosa</li>
-                    <li>Recife - PE, 51010-145</li>
-                    <li class="mt-2"><a href="mailto:contato@brennand.org.br">contato@brennand.org.br</a></li>
-                </ul>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-                <h5 class="footer-section-title">Acesso Restrito</h5>
-                <ul class="list-unstyled footer-links">
-                    <li><a th:href="@{/admin}">Login do Gestor</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="row footer-bottom">
-            <div class="col-md-6">
-                <p>&copy; 2025 Visita Brennand. Todos os direitos reservados.</p>
-            </div>
-            <div class="col-md-6 text-md-end">
-                <p>Desenvolvido como projeto acadêmico.</p>
-            </div>
-        </div>
+  <main class="container">
+ 
+    <div class="calendar">
+      <h4 id="mesAtual">Mês</h4>
+      <div class="days-grid" id="daysContainer"></div>
     </div>
-</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+   
+    <div class="card shadow-sm mb-3">
+      <div class="card-body text-center" id="aviso">
+        <p class="mb-0"><strong id="dataAtualTexto"></strong></p>
+        <p>Parque <strong>fechado</strong> hoje!</p>
+        <small>
+          Informamos que o parque estará fechado hoje em razão da maré alta,
+          visando sua segurança.<br />Agradecemos a compreensão.
+        </small>
+      </div>
+    </div>
+
+   
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h5 class="card-title fw-bold">HORÁRIOS DE FUNCIONAMENTO</h5>
+        <p class="mb-1">Terça a Sexta-feira: 09:00 às 16:00</p>
+        <p>Sábado e Domingo: 08:00 às 16:00</p>
+      </div>
+    </div>
+
+    
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title fw-bold">REGRAS DE VISITAÇÃO</h5>
+            <ul>
+              <li>Crianças com responsáveis</li>
+              <li>Jogue lixo nas lixeiras</li>
+              <li>Proibido fumar</li>
+              <li>Sem drones</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <div class="feedback-container">
+          <h5 class="fw-bold text-center mb-3">AVALIE SUA EXPERIÊNCIA!</h5>
+
+          <form id="feedbackForm">
+            <div class="mb-3">
+              <label for="nome" class="form-label">Nome:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nome"
+                maxlength="80"
+                required
+              />
+              <div class="error-msg" id="erroNome"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="comentario" class="form-label">Comentário:</label>
+              <textarea
+                class="form-control"
+                id="comentario"
+                rows="3"
+                maxlength="1000"
+                required
+              ></textarea>
+              <div class="error-msg" id="erroComentario"></div>
+            </div>
+
+            <div class="mb-3 text-center">
+              <label class="form-label d-block mb-2">Nota:</label>
+              <div class="stars" id="stars">
+                <span class="star" data-value="1">&#9733;</span>
+                <span class="star" data-value="2">&#9733;</span>
+                <span class="star" data-value="3">&#9733;</span>
+                <span class="star" data-value="4">&#9733;</span>
+                <span class="star" data-value="5">&#9733;</span>
+              </div>
+              <div class="error-msg" id="erroNota"></div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary w-100"
+              id="btnEnviar"
+              disabled
+            >
+              ENVIAR
+            </button>
+            <div id="mensagemSucesso" class="success-msg"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+ 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const form = document.getElementById("feedbackForm");
+    const btnEnviar = document.getElementById("btnEnviar");
+    const sucesso = document.getElementById("mensagemSucesso");
+
+    const campos = {
+      nome: document.getElementById("nome"),
+      comentario: document.getElementById("comentario"),
+    };
+
+    const erros = {
+      nome: document.getElementById("erroNome"),
+      nota: document.getElementById("erroNota"),
+      comentario: document.getElementById("erroComentario"),
+    };
+
+    let notaSelecionada = 0;
+
+  
+    document.querySelectorAll(".star").forEach((star) => {
+      star.addEventListener("click", () => {
+        notaSelecionada = parseInt(star.getAttribute("data-value"));
+        document
+          .querySelectorAll(".star")
+          .forEach((s, i) =>
+            s.classList.toggle("selected", i < notaSelecionada)
+          );
+        validarCampos();
+      });
+    });
+
+   
+    function validarCampos() {
+      let valido = true;
+      sucesso.textContent = "";
+
+      if (
+        campos.nome.value.trim().length < 2 ||
+        campos.nome.value.trim().length > 80
+      ) {
+        erros.nome.textContent = "O Nome deve ter entre 2 e 80 caracteres.";
+        valido = false;
+      } else {
+        erros.nome.textContent = "";
+      }
+
+      if (notaSelecionada === 0) {
+        erros.nota.textContent = "Selecione uma nota.";
+        valido = false;
+      } else {
+        erros.nota.textContent = "";
+      }
+
+      if (campos.comentario.value.trim().length < 5) {
+        erros.comentario.textContent =
+          "O Comentário deve ter pelo menos 5 caracteres.";
+        valido = false;
+      } else {
+        erros.comentario.textContent = "";
+      }
+
+      btnEnviar.disabled = !valido;
+    }
+
+    Object.values(campos).forEach((campo) =>
+      campo.addEventListener("input", validarCampos)
+    );
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      validarCampos();
+
+      if (!btnEnviar.disabled) {
+        sucesso.textContent = "Feedback enviado com sucesso!";
+        form.reset();
+        notaSelecionada = 0;
+        document.querySelectorAll(".star").forEach((s) =>
+          s.classList.remove("selected")
+        );
+        btnEnviar.disabled = true;
+      }
+    });
+
+    //Geração do carrossel de dias 
+    function gerarCarrosselDias() {
+      const container = document.getElementById("daysContainer");
+      const mesAtual = document.getElementById("mesAtual");
+      container.innerHTML = "";
+
+      const agora = new Date();
+      const fusoAgora = new Date(
+        agora.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" })
+      );
+
+      const diaAtual = fusoAgora.getDate();
+      const mes = fusoAgora.getMonth();
+      const ano = fusoAgora.getFullYear();
+
+      const nomesMeses = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+      ];
+      mesAtual.textContent = nomesMeses[mes];
+
+      for (let i = -3; i <= 3; i++) {
+        const novaData = new Date(ano, mes, diaAtual + i);
+        const dia = novaData.getDate();
+        const div = document.createElement("div");
+        div.classList.add("day");
+        if (i === 0) div.classList.add("active");
+        div.textContent = dia;
+        container.appendChild(div);
+      }
+
+      const dia = String(fusoAgora.getDate()).padStart(2, "0");
+      const mesStr = String(fusoAgora.getMonth() + 1).padStart(2, "0");
+      const anoStr = fusoAgora.getFullYear();
+      document.getElementById("dataAtualTexto").textContent = `${dia}/${mesStr}/${anoStr}`;
+    }
+
+    gerarCarrosselDias();
+  </script>
 </body>
 </html>
