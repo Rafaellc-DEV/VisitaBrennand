@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title th:text="${pageTitle} ?: 'Feedbacks'">Feedbacks</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+
+    <style>
+        :root{
+          /* Cores Padrão do Site */
+          --brand:#294A5D;
+          --accent:#A7532C;
+          --olive:#556B2F; /* Mudado para a cor dos feedbacks */
+          --beige:#F4F1EA;
+          --ink:#1A202C;
+          --muted:#718096; /* Mudado para a cor dos feedbacks */
+          --surface:#FFFFFF;
+          --line:#E5E7EB; /* Mudado para a cor dos feedbacks */
+          --bg:#F0F5FA; /* Fundo claro e profissional */
+          --soft:#f9fafb; /* Adicionado do feedbacks.html */
+        }
+
+        html,body{height:100%;}
+        body{
+          font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+          color:var(--ink);
+          background-color: var(--bg);
+        }
+
+        /* Layout */
+        .app{
+          display:grid;
+          grid-template-columns: 280px 1fr;
+          min-height:100vh;
+        }
+        @media (max-width: 991.98px){
+          .app{ grid-template-columns: 1fr; }
+          .sidebar{ display: none; }
+        }
+
+        /* Sidebar */
+        .sidebar{
+          background: linear-gradient(180deg, #ffffff, #fafafa 70%);
+          border-right:1px solid var(--line);
+          display: flex;
+          flex-direction: column;
+        }
+        .brand{ padding:24px 20px; border-bottom:1px solid var(--line); }
+        .brand h1{
+          font-size:22px; letter-spacing:.6px; margin:0;
+          color:var(--brand); font-weight:800; text-transform:uppercase;
+        }
+        .menu-section{
+          padding:16px 14px 8px; color:var(--muted); font-weight:600;
+          text-transform:uppercase; font-size:12px;
+        }
+        .nav-item + .nav-item{ margin-top:8px; }
+        .nav-link{
+          display:flex; align-items:center; gap:10px; padding:12px 14px;
+          border-radius:12px; color:var(--ink); background:var(--surface);
+          border:1px solid var(--line); transition: all .18s ease;
+          text-decoration:none; font-weight:500;
+        }
+        .nav-link:hover{
+          transform: translateY(-1px);
+          box-shadow:0 6px 14px -8px rgba(0,0,0,.15);
+          border-color:#dfe3e8;
+        }
+        .nav-link .bi{ font-size:18px; color:var(--brand); }
+        /* CLASSE 'active' MARCA O ITEM ATUAL DO MENU */
+        .nav-link.active{
+          border-color: color-mix(in oklab, var(--brand) 28%, white);
+          background: color-mix(in oklab, var(--brand) 8%, white);
+          box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--brand) 20%, transparent);
+          font-weight: 600; /* Destaque extra */
+        }
+        .sidebar-footer{
+          margin-top:auto; padding:16px; border-top:1px solid var(--line);
+        }
+        .user-card{
+          display:flex; gap:12px; align-items:center;
+          padding:12px; border:1px solid var(--line);
+          border-radius:12px; background:var(--surface);
+        }
+        .avatar{
+          width:36px; height:36px; border-radius:50%;
+          display:grid; place-items:center;
+          border:1px solid var(--line);
+          background: color-mix(in oklab, var(--brand) 12%, white);
+          color:var(--brand); font-weight:700;
+        }
+
+        /* Topbar */
+        .topbar{
+          padding:16px 24px; display:flex; align-items:center; justify-content:space-between;
+          border-bottom:1px solid var(--line); background: rgba(255,255,255,.65);
+          backdrop-filter: blur(8px); position:sticky; top:0; z-index:10;
+        }
+        .title{
+          margin:0; font-size:24px; font-weight:700; color:var(--brand);
+        }
+
+        /* === ESTILOS DA PÁGINA DE FEEDBACK === */
+
+        /* Corrigido: :root --olive do admin/index.html estava conflitando */
+        :root{ --olive-feedback: #2e7d32; }
+
+        .wrap{
+            max-width: 980px;
+            /* margin: 32px auto; -> Removido, pois a 'main' já centraliza */
+            /* padding: 0 16px; -> Removido, pois a 'main' já tem padding */
+            margin: 0 auto; /* Apenas centraliza */
+            width: 100%;
+        }
+
+        .filters-bar{
+            position: sticky;
+            top: 74px; /* Ajustado para ficar abaixo do topbar (61px + 12px) */
+            z-index: 5;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 14px;
+            box-shadow: 0 10px 24px -18px rgba(0,0,0,.3);
+            margin-bottom: 18px;
+        }
+        .filters-bar .title{
+            font-size: 20px;
+            font-weight: 800;
+            margin: 0 0 8px 0;
+            color: var(--brand);
+            letter-spacing: .2px;
+        }
+        .filters-grid{
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 12px;
+        }
+        @media (max-width: 720px){
+            .filters-grid{ grid-template-columns: 1fr; }
+        }
+        .filters-bar .form-label{
+            font-weight: 600;
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+        .btn-filter{
+            height: 42px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: color-mix(in oklab, var(--brand) 10%, white);
+            color: var(--ink);
+            font-weight: 600;
+            padding: 0 16px;
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+        .btn-filter:hover{
+            transform: translateY(-1px);
+            box-shadow: 0 10px 18px -16px rgba(0,0,0,.35);
+        }
+
+        .list{
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .feedback-card{
+            border:1px solid var(--line);
+            border-radius:14px;
+            background:linear-gradient(180deg, var(--surface), var(--soft));
+            padding:16px 18px;
+            box-shadow:0 14px 28px -22px rgba(0,0,0,.35);
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+        }
+        .feedback-card:hover{
+            transform: translateY(-2px);
+            border-color: #d9dee6;
+            box-shadow:0 18px 36px -26px rgba(0,0,0,.45);
+        }
+
+        .card-head{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .name{
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing:.2px;
+        }
+
+        .badge-chip{
+            border-radius: 20px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing:.3px;
+        }
+        .chip-sug{ background:#e9f7ee; color: var(--olive-feedback); border:1px solid #cfead7; }
+        .chip-rec{ background:#fdecec; color:#c62828; border:1px solid #f7d4d4; }
+
+        .stars{
+            display:flex; align-items:center; gap:2px;
+            margin: 4px 0 8px 0;
+            font-size: 18px;
+            line-height: 1;
+        }
+        .star{ color:#f6c343; }
+        .star-muted{ color:#cbd5e1; }
+
+        .comment{
+            margin: 0 0 6px 0;
+            color: var(--ink);
+            font-size: 15px;
+        }
+        .date{
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .empty{
+            text-align:center;
+            color:var(--muted);
+            margin-top: 36px;
+        }
+        .empty i{ font-size: 38px; display:block; margin-bottom: 6px; }
+
+        /* Estilo da 'main' e 'content' do admin/index.html */
+        main.content-wrapper {
+          flex-grow: 1;
+          padding: 2rem; /* Padding original da <section class="content"> */
+        }
+        @media (max-width: 768px){
+            main.content-wrapper {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="app">
+
+    <aside class="sidebar d-none d-lg-flex flex-column">
+        <div class="brand">
+            <h1>VISITA<br/>BRENNAND</h1>
+        </div>
+        <div class="px-3 pt-3">
+            <div class="menu-section">Principal</div>
+            <nav class="nav flex-column">
+                <div class="nav-item"><a class="nav-link" th:href="@{/admin/avisos}"><i class="bi bi-bell"></i> Avisos</a></div>
+                <div class="nav-item"><a class="nav-link" th:href="@{/admin/horarios}"><i class="bi bi-clock"></i> Horários</a></div>
+                <div class="nav-item"><a class="nav-link" th:href="@{/admin/regras}"><i class="bi bi-journal-check"></i> Regras</a></div>
+            </nav>
+            <div class="menu-section">Gestão</div>
+            <nav class="nav flex-column mb-4">
+                <div class="nav-item"><a class="nav-link active" th:href="@{/admin/feedbacks}"><i class="bi bi-chat-square-heart"></i> Feedbacks</a></div>
+                <div class="nav-item"><a class="nav-link" th:href="@{/admin/relatorios}"><i class="bi bi-graph-up"></i> Relatórios</a></div>
+            </nav>
+        </div>
+        <div class="sidebar-footer">
+            <div class="user-card mb-2">
+                <div class="avatar">A</div>
+                <div class="small">
+                    <div class="fw-semibold">Administrador</div>
+                    <div class="text-muted">@admin</div>
+                </div>
+            </div>
+            <a class="btn btn-outline-secondary w-100" th:href="@{/logout}"><i class="bi bi-box-arrow-left me-1"></i> Sair</a>
+        </div>
+    </aside>
+
+    <main class="d-flex flex-column">
+
+        <div class="topbar">
+            <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu"><i class="bi bi-list fs-3"></i></button>
+            <h2 class="title d-none d-lg-block">Feedbacks</h2>
+            <a class="btn btn-sm btn-outline-secondary" th:href="@{/}"><i class="bi bi-house me-1"></i> Ver site</a>
+        </div>
+
+        <section class="content-wrapper">
+            <div class="wrap">
+
+                <form method="get" class="filters-bar">
+                    <h3 class="title"><i class="bi bi-chat-square-heart me-1"></i> Feedbacks Recebidos</h3>
+
+                    <div class="filters-grid">
+                        <div>
+                            <label class="form-label">Filtrar por tipo</label>
+                            <select class="form-select" name="tipo">
+                                <option value="" th:selected="${tipoSelecionado == null}">Todos</option>
+                                <option th:value="'Sugestão'" th:selected="${tipoSelecionado == 'Sugestão'}">Sugestão</option>
+                                <option th:value="'Reclamação'" th:selected="${tipoSelecionado == 'Reclamação'}">Reclamação</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="form-label">Ordenar por</label>
+                            <select class="form-select" name="ordenar">
+                                <option th:value="'recentes'" th:selected="${ordenacaoSelecionada == 'recentes'}">Mais recentes</option>
+                                <option th:value="'estrelas'" th:selected="${ordenacaoSelecionada == 'estrelas'}">Mais bem avaliados</option>
+                            </select>
+                        </div>
+
+                        <div class="d-flex align-items-end">
+                            <button type="submit" class="btn-filter w-100">
+                                <i class="bi bi-funnel"></i> Aplicar filtros
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="list" th:if="${feedbacks != null and feedbacks.size() > 0}">
+                    <div class="feedback-card" th:each="f : ${feedbacks}">
+                        <div class="card-head">
+                            <div class="name" th:text="${f.nome}">Nome</div>
+                            <span class="badge-chip"
+                                  th:classappend="${f.tipo == 'Reclamação'} ? ' chip-rec' : ' chip-sug'"
+                                  th:text="${f.tipo}">Tipo</span>
+                        </div>
+
+                        <div class="stars">
+                            <span th:each="n : ${#numbers.sequence(1, f.nota)}">
+                                <i class="bi bi-star-fill star"></i>
+                            </span>
+                            <span th:if="${f.nota < 5}" th:each="n : ${#numbers.sequence(1, 5 - f.nota)}">
+                                <i class="bi bi-star star-muted"></i>
+                            </span>
+                        </div>
+
+                        <p class="comment" th:text="${f.comentario}">Comentário</p>
+                        <div class="date" th:text="${#temporals.format(f.criadoEm, 'dd/MM/yyyy HH:mm')}">01/01/2025 12:00</div>
+                    </div>
+                </div>
+
+                <div class="empty" th:if="${feedbacks == null or feedbacks.size() == 0}">
+                    <i class="bi bi-inbox"></i>
+                    Nenhum feedback encontrado.
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title">Menu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="menu-section">Principal</div>
+        <nav class="nav flex-column">
+            <div class="nav-item"><a class="nav-link" th:href="@{/admin/avisos}"><i class="bi bi-bell"></i> Avisos</a></div>
+            <div class="nav-item"><a class="nav-link" th:href="@{/admin/horarios}"><i class="bi bi-clock"></i> Horários</a></div>
+            <div class="nav-item"><a class="nav-link" th:href="@{/admin/regras}"><i class="bi bi-journal-check"></i> Regras</a></div>
+        </nav>
+        <div class="menu-section">Gestão</div>
+        <nav class="nav flex-column mb-4">
+            <div class="nav-item"><a class="nav-link active" th:href="@{/admin/feedbacks}"><i class="bi bi-chat-square-heart"></i> Feedbacks</a></div>
+            <div class="nav-item"><a class="nav-link" th:href="@{/admin/relatorios}"><i class="bi bi-graph-up"></i> Relatórios</a></div>
+        </nav>
+        <hr/>
+        <a class="btn btn-outline-secondary w-100" th:href="@{/logout}"><i class="bi bi-box-arrow-left me-1"></i> Sair</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

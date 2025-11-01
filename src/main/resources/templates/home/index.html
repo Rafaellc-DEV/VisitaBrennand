@@ -899,5 +899,47 @@
                 onChange: function(selectedDates, dateStr, instance) {
                     loadCalendar(dateStr);
                     // Verifica se o dia selecionado é segunda-feira
-                    if (selectedDates[0].getDay() === 1) {
+                    if (selectedDates[0].getDay() === 1) { // 1 é Segunda
                         updateAvisoBanner([], true);
+                    } else {
+                        // CORREÇÃO: Faltava carregar avisos para dias normais
+                        loadNotices(dateStr);
+                    }
+                } // <-- Fechamento do onChange
+            }); // <-- Fechamento do flatpickr
+
+            // --- Ação de Clicar no Botão "Hoje" ---
+            const todayButton = container.querySelector('#today-button');
+            const hojeDateStr = container.getAttribute('data-hoje-date');
+
+            todayButton.addEventListener('click', () => {
+                loadCalendar(hojeDateStr);
+
+                // Verifica se hoje é segunda-feira
+                const hoje = new Date(hojeDateStr + 'T12:00:00');
+                if (hoje.getDay() === 1) { // 1 é Segunda
+                    updateAvisoBanner([], true);
+                } else {
+                    loadNotices(hojeDateStr);
+                }
+            });
+
+        } // Fim de attachCalendarListeners
+
+
+        // --- LÓGICA 2: VALIDAÇÃO DO FORMULÁRIO (Exemplo) ---
+        // (Esta parte não foi implementada no arquivo original, mas é onde iria)
+
+
+        // --- Inicialização ---
+        // Anexa os listeners ao HTML inicial carregado pelo Thymeleaf
+        const initialCalendar = document.getElementById('calendar-fragment');
+        if (initialCalendar) {
+            attachCalendarListeners(initialCalendar);
+        }
+
+    });
+</script>
+
+</body>
+</html>
