@@ -11,14 +11,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.DayOfWeek; // IMPORTAR
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set; // IMPORTAR
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -26,10 +26,13 @@ public class HomeController {
 
     private final AvisoService avisoService;
     private final FeedbackService feedbackService;
+    private final RegraService regraService; // <-- 1. ADICIONADO
 
-    public HomeController(AvisoService a, FeedbackService f){
+    // 2. CONSTRUTOR ATUALIZADO
+    public HomeController(AvisoService a, FeedbackService f, RegraService r){
         this.avisoService = a;
         this.feedbackService = f;
+        this.regraService = r; // <-- 3. ADICIONADO
     }
 
     /**
@@ -91,6 +94,9 @@ public class HomeController {
                         Locale locale) {
 
         loadCalendarData(model, baseDateStr, locale);
+
+        // 4. ADICIONA AS REGRAS DINÂMICAS AO MODEL
+        model.addAttribute("regra", regraService.getRegra());
 
         if (!model.containsAttribute("feedback")) {
             model.addAttribute("feedback", new Feedback());

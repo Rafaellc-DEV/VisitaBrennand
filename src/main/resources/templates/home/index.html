@@ -46,10 +46,6 @@
             }
         }
 
-
-        /* ================================================== */
-        /* HEADER ATUALIZADO (com Seletor de Idioma)      */
-        /* ================================================== */
         .site-header {
             background-color: var(--color-brand);
             padding: 0.75rem 1rem;
@@ -79,18 +75,14 @@
         .site-header .site-title:hover {
             color: rgba(255,255,255,0.8);
         }
-
-        /* Container para as ações da direita (apenas o seletor) */
         .header-actions {
             display: flex;
             align-items: center;
         }
-
-        /* CSS para o seletor de idioma no header (LARANJA) */
         .header-actions .lang-switcher-container .dropdown-toggle {
             color: #fff;
-            background-color: var(--color-accent); /* COR LARANJA */
-            border-color: var(--color-accent); /* COR LARANJA */
+            background-color: var(--color-accent);
+            border-color: var(--color-accent);
             padding: 0.35rem 0.6rem;
             font-size: 0.875rem;
             border-radius: 8px;
@@ -98,7 +90,7 @@
         }
         .header-actions .lang-switcher-container .dropdown-toggle:hover {
             color: #fff;
-            background-color: #8c4423; /* Laranja mais escuro no hover */
+            background-color: #8c4423;
             border-color: #8c4423;
         }
         .header-actions .lang-switcher-container .dropdown-toggle img {
@@ -108,14 +100,11 @@
         }
         .header-actions .lang-switcher-container .dropdown-toggle span {
             font-weight: 600;
-            display: none; /* Esconde o "PT" / "EN" em telas pequenas */
+            display: none;
         }
         .lang-switcher-container .dropdown-menu img {
             margin-right: 0.5rem !important;
         }
-
-
-        /* Ajustes do Header para Desktop */
         @media (min-width: 769px) {
             .site-header {
                 height: var(--header-height-desktop);
@@ -129,44 +118,32 @@
                 font-size: 0.9rem;
             }
             .header-actions .lang-switcher-container .dropdown-toggle span {
-                display: inline; /* Mostra o "PT" / "EN" em desktop */
+                display: inline;
             }
         }
-
-        /* ================================================== */
-        /* BANNER (Usando a nova foto panorâmica)         */
-        /* ================================================== */
         .hero-banner-image {
             width: 100%;
             height: 25vw;
             min-height: 140px;
-            max-height: 220px; /* Limite de altura em mobile */
-
+            max-height: 220px;
             background-image: url('/img/banner_panoramico.jpg');
             background-size: cover;
             background-position: center 50%;
             border-bottom: 1px solid var(--color-border);
             margin-top: var(--header-height-mobile);
         }
-
         @media (min-width: 769px) {
             .hero-banner-image {
-                /* Altura ajustada para 280px */
                 height: 280px;
-                max-height: 280px; /* Garante a altura */
+                max-height: 280px;
                 margin-top: var(--header-height-desktop);
             }
         }
-        /* ================================================== */
-
-
-        /* ===== Conteúdo principal ===== */
         .wrap {
           max-width: 1100px;
           margin: auto;
           padding: 1.5rem 1rem 2rem 1rem;
         }
-
         .card-ui {
           background-color: var(--color-background);
           border: 1px solid var(--color-border);
@@ -176,7 +153,6 @@
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
                       0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
-
         .section-title {
           font-size: 1rem;
           font-weight: 600;
@@ -186,12 +162,9 @@
           border-bottom: 1px solid var(--color-border);
           display: block;
         }
-
-        /* --- Seção de Aviso Dinâmico --- */
         #aviso-container {
             margin-bottom: 1.5rem;
         }
-
         .status-banner {
           display: flex;
           align-items: flex-start;
@@ -200,7 +173,6 @@
           padding: 1.25rem;
           border: 1px solid transparent;
         }
-
         .status-banner__icon {
           flex-shrink: 0;
           width: 24px;
@@ -209,38 +181,29 @@
         }
         .status-banner__icon--success { color: var(--color-success-icon); }
         .status-banner__icon--warning { color: var(--color-warning-icon); }
-
-
         .status-banner__content p {
           margin: 0;
           color: var(--color-text-secondary);
           font-size: 0.9rem;
         }
-
         .status-banner__content strong {
           color: var(--color-text-primary);
           display: block;
         }
-
         .status-banner--success {
           background-color: var(--color-success-bg);
           border-color: #C6F6D5;
         }
-
         .status-banner--warning {
           background-color: var(--color-warning-bg);
           border-color: #FEEBC8;
         }
-
-        /* --- Calendário --- */
         .calendar-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 1.5rem;
         }
-
-        /* Botão do Mês (Flatpickr) */
         #month-name-button {
             color: var(--color-text-primary);
             transition: color 0.2s;
@@ -248,14 +211,12 @@
         #month-name-button:hover {
             color: var(--color-accent);
         }
-
         .calendar-pills {
           display: flex;
           gap: 0.5rem;
           justify-content: center;
           align-items: center;
         }
-
         .pill {
           border: 1px solid var(--color-border);
           border-radius: 10px;
@@ -271,7 +232,7 @@
         .pill:hover {
             background-color: #f8f8f8;
         }
-        .pill.active { /* Dia 'base' selecionado */
+        .pill.active {
           background-color: var(--color-brand);
           color: #fff;
           border-color: var(--color-brand);
@@ -279,8 +240,6 @@
         .pill.active:hover {
             background-color: var(--color-brand);
         }
-
-        /* ESTILO 1: Dia Fechado (Segunda-feira) */
         .pill.is-closed {
             opacity: 0.6;
             background-color: #f9fafb;
@@ -296,8 +255,6 @@
         .pill.is-closed.active:hover {
             background-color: var(--color-brand);
         }
-
-        /* ESTILO 2: "Dot" de Aviso */
         .pill.has-aviso::after {
             content: '';
             width: 7px;
@@ -309,18 +266,13 @@
             right: 6px;
             border: 1px solid var(--color-background);
         }
-
         .pill.active.has-aviso::after {
             background-color: var(--color-surface);
             border-color: var(--color-brand);
         }
-
-
         .pill .day-of-week { font-size: 0.8rem; }
         .pill .day-of-month { font-size: 1.25rem; font-weight: 700; }
         .pill .today-label { font-weight:500;font-size:.65rem;margin-top:2px; }
-
-
         .calendar-arrow {
           font-size: 1.5rem;
           color: var(--color-text-secondary);
@@ -331,40 +283,31 @@
         .calendar-arrow:hover {
             color: var(--color-text-primary);
         }
-
-        /* --- Formulário --- */
         .form-label {
           font-size: 0.875rem;
           font-weight: 500;
           margin-bottom: 0.25rem;
         }
-
         .form-control, .form-check-input {
           border-color: var(--color-border);
         }
-
         .form-control {
           border-radius: 8px;
         }
-
         .form-control:focus, .form-check-input:focus {
           border-color: var(--color-brand);
           box-shadow: 0 0 0 3px rgba(41, 74, 93, .1);
         }
-
         .form-check-input:checked {
             background-color: var(--color-brand);
             border-color: var(--color-brand);
         }
-
-        /* Mensagem de erro de validação (para JS) */
         .validation-error {
             color: var(--color-danger-text);
             font-size: 0.8rem;
             margin-top: 0.25rem;
-            display: none; /* Começa escondido */
+            display: none;
         }
-
         .star-rating {
             display: flex;
             flex-direction: row-reverse;
@@ -385,8 +328,6 @@
         .star-rating label:hover ~ label {
             color: #FBBF24;
         }
-
-        /* CSS Rádio mais visível */
         #feedback-form .form-check-input {
             width: 1.25em;
             height: 1.25em;
@@ -402,8 +343,6 @@
              display: flex;
              align-items: center;
         }
-
-
         .btn-brand {
           background-color: var(--color-accent);
           border-color: var(--color-accent);
@@ -418,14 +357,11 @@
             border-color: #8c4423;
             color: #fff;
         }
-
         .bottom-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 1.5rem;
         }
-
-        /* --- Alertas de Feedback (Sucesso/Erro) --- */
         .alert-container {
             margin-top: 1.5rem;
         }
@@ -439,8 +375,6 @@
             color: var(--color-danger-text);
             border-color: #FED7D7;
         }
-
-        /* --- Rodapé --- */
         .footer {
           background-color: var(--color-brand);
           color: #fff;
@@ -470,15 +404,25 @@
           .bottom-grid { grid-template-columns: 1fr; }
         }
 
+        /* CSS ADICIONAL:
+          Garante que o conteúdo das regras (listas, p)
+          não tenha margens estranhas
+        */
+        .regras-content p:last-child,
+        .regras-content ul:last-child,
+        .regras-content ol:last-child {
+            margin-bottom: 0;
+        }
+
     </style>
 </head>
 <body>
 
-<header class="site-header position-fixed">
+<header class="site-header position-fixed" th:fragment="site-header">
     <div class="container-fluid">
         <a th:href="@{/}" class="site-title" th:text="#{home.titulo}">VISITA BRENNAND</a>
 
-        <nav class="header-actions d-flex align-items-center">
+        <nav class="header-actions d-flex align-items: center">
             <div class="lang-switcher-container dropdown">
                 <button class="btn dropdown-toggle btn-sm d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="lang-switcher-button">
                     <th:block th:if="${#locale.language == 'en'}">
@@ -587,14 +531,30 @@
         </section>
 
         <section class="bottom-grid">
+
             <div class="card-ui">
-                <h5 class="section-title" th:text="#{home.regras}"></h5>
-                <ul class="mb-0 ps-3 text-secondary">
-                    <li>Crianças com responsáveis</li>
-                    <li>Jogue lixo nas lixeiras</li>
-                    <li>Proibido fumar</li>
-                    <li>Sem drones</li>
-                </ul>
+                <h5 class="section-title" th:text="${regra?.titulo} ?: #{home.regras}">Regras de Visitação</h5>
+
+                <div class="text-muted small mb-3">
+                    Última atualização:
+                    <span th:if="${regra != null and regra.atualizadoEm != null}"
+                          th:text="${#temporals.format(regra.atualizadoEm, 'dd/MM/yyyy')}"></span>
+                    <span th:if="${regra == null or regra.atualizadoEm == null}">N/A</span>
+                </div>
+
+                <div class="regras-content"
+                     th:if="${regra != null and regra.conteudo != null and !regra.conteudo.isBlank() and regra.conteudo != '<p><br></p>'}"
+                     th:utext="${regra.conteudo}">
+                </div>
+
+                <div th:if="${regra == null or regra.conteudo == null or regra.conteudo.isBlank() or regra.conteudo == '<p><br></p>'}">
+                    <ul class="mb-0 ps-3 text-secondary">
+                        <li>Crianças com responsáveis</li>
+                        <li>Jogue lixo nas lixeiras</li>
+                        <li>Proibido fumar</li>
+                        <li>Sem drones</li>
+                    </ul>
+                </div>
             </div>
 
             <div class="card-ui" id="feedback-form">
@@ -669,6 +629,7 @@
                 <span th:text="#{home.comochegar.barqueiros.preco2}">R$ 6,00 por trecho com bicicleta</span>
             </p>
         </section>
+
         <div class="alert-container">
             <div class="alert alert-success" th:if="${ok}" th:text="#{${ok}}" role="alert"></div>
             <div class="alert alert-danger" th:if="${erro}" th:text="${erro}" role="alert"></div>
@@ -676,7 +637,7 @@
     </main>
 </div>
 
-<footer class="footer">
+<footer class="footer" th:fragment="footer">
     <div class="container">
         <div class="row">
 
@@ -729,73 +690,48 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
-
 
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function () {
 
         // --- LÓGICA 1: CALENDÁRIO DINÂMICO ---
-
         const calendarContainer = document.getElementById('calendar-container');
         const avisoContainer = document.getElementById('aviso-container');
-
-        // Textos i18n para os avisos do JS
         const textoPadraoTitulo = /*[[#{home.aviso.parque_aberto}]]*/ 'Parque Aberto';
         const textoPadraoSub = 'Informação institucional padrão.';
         const textoFechadoTitulo = /*[[#{home.aviso.parque_fechado}]]*/ 'Parque Fechado';
         const textoFechadoDesc = /*[[#{home.aviso.parque_fechado_desc}]]*/ 'O parque não abre às segundas-feiras.';
 
-        /**
-         * (Re)carrega o fragmento do calendário a partir do servidor
-         */
         async function loadCalendar(dateStr) {
             try {
                 const response = await fetch(`/api/calendar?date=${dateStr}`);
                 if (!response.ok) throw new Error('Falha ao carregar calendário');
                 const html = await response.text();
-
-                // Substitui o HTML DENTRO do container estático
                 calendarContainer.innerHTML = html;
-
-                // Pega o NOVO fragmento que acabou de ser inserido
                 const newFragment = calendarContainer.querySelector('#calendar-fragment');
-
-                // Re-anexa todos os listeners ao novo HTML
                 attachCalendarListeners(newFragment);
             } catch (error) {
                 console.error('Erro ao carregar calendário:', error);
             }
         }
 
-        /**
-         * Carrega os avisos (JSON) para uma data específica
-         */
         async function loadNotices(dateStr) {
             try {
                 const response = await fetch(`/api/avisos?data=${dateStr}`);
                 if (!response.ok) throw new Error('Falha ao buscar avisos');
                 const avisos = await response.json();
-
-                // Atualiza o banner de avisos (caso 'isClosed' seja falso)
                 updateAvisoBanner(avisos, false);
-
             } catch (error) {
                 console.error('Erro ao buscar avisos:', error);
-                updateAvisoBanner([], false); // Mostra aviso padrão em caso de erro
+                updateAvisoBanner([], false);
             }
         }
 
-        /**
-         * Atualiza o HTML do banner de avisos
-         */
         function updateAvisoBanner(avisos, isClosed) {
             let html;
-
             if (isClosed) {
-                // NOVO CASO: Dia de Segunda-feira (Fechado)
                 html = `
                 <div class="status-banner status-banner--warning">
                     <div class="status-banner__icon status-banner__icon--warning"><i class="bi bi-calendar-x-fill"></i></div>
@@ -806,7 +742,6 @@
                 </div>`;
             }
             else if (avisos && avisos.length > 0) {
-                // CASO 1: Dia com Aviso
                 const textoAviso = avisos[0].texto;
                 html = `
                 <div class="status-banner status-banner--warning">
@@ -817,7 +752,6 @@
                     </div>
                 </div>`;
             } else {
-                // CASO 2: Dia normal, sem aviso (Aberto)
                 html = `
                 <div class="status-banner status-banner--success">
                     <div class="status-banner__icon status-banner__icon--success"><i class="bi bi-check-circle-fill"></i></div>
@@ -830,109 +764,74 @@
             avisoContainer.innerHTML = html;
         }
 
-        /**
-         * Anexa TODOS os listeners de evento ao container do calendário
-         * (LÓGICA ATUALIZADA E CORRIGIDA)
-         */
         function attachCalendarListeners(container) {
-
-            // --- Ação das Setas (Navegação de 7 dias) ---
             container.querySelector('#prev-days').addEventListener('click', () => {
-                // LÊ a data base ATUAL do HTML no momento do clique
                 const currentBaseDateStr = container.getAttribute('data-base-date');
-                const date = new Date(currentBaseDateStr + 'T12:00:00'); // Adiciona T12 para evitar fuso
-
+                const date = new Date(currentBaseDateStr + 'T12:00:00');
                 date.setDate(date.getDate() - 7);
                 const newDateStr = date.toISOString().split('T')[0];
-
                 loadCalendar(newDateStr);
                 loadNotices(newDateStr);
             });
 
             container.querySelector('#next-days').addEventListener('click', () => {
-                // LÊ a data base ATUAL do HTML no momento do clique
                 const currentBaseDateStr = container.getAttribute('data-base-date');
                 const date = new Date(currentBaseDateStr + 'T12:00:00');
-
                 date.setDate(date.getDate() + 7);
                 const newDateStr = date.toISOString().split('T')[0];
-
                 loadCalendar(newDateStr);
                 loadNotices(newDateStr);
             });
 
-            // --- Ação de Clicar no Dia (Pill) ---
             container.querySelectorAll('.pill-date').forEach(pill => {
                 pill.addEventListener('click', function() {
-
                     const clickedDateStr = this.getAttribute('data-date');
                     const currentBaseDateStr = container.getAttribute('data-base-date');
-
-                    // Centraliza o calendário no dia clicado
                     if (clickedDateStr !== currentBaseDateStr) {
                         loadCalendar(clickedDateStr);
                     }
-
-                    // MUDANÇA: Ação de clique de dia fechado
                     if (this.classList.contains('is-closed')) {
-                        // Se for segunda-feira, mostra o aviso de FECHADO
                         updateAvisoBanner([], true);
                     } else {
-                        // Se for dia normal, busca avisos da API
                         loadNotices(clickedDateStr);
                     }
                 });
             });
 
-            // --- Ação de Clicar no Mês (Flatpickr) ---
             const monthButton = container.querySelector('#month-name-button');
             const currentBaseDateStr = container.getAttribute('data-base-date');
-
             flatpickr(monthButton, {
                 locale: "pt",
                 defaultDate: currentBaseDateStr,
                 disable: [
                     function(date) {
-                        return (date.getDay() === 1); // Desabilita segundas-feiras
+                        return (date.getDay() === 1);
                     }
                 ],
                 onChange: function(selectedDates, dateStr, instance) {
                     loadCalendar(dateStr);
-                    // Verifica se o dia selecionado é segunda-feira
-                    if (selectedDates[0].getDay() === 1) { // 1 é Segunda
+                    if (selectedDates[0].getDay() === 1) {
                         updateAvisoBanner([], true);
                     } else {
-                        // CORREÇÃO: Faltava carregar avisos para dias normais
                         loadNotices(dateStr);
                     }
-                } // <-- Fechamento do onChange
-            }); // <-- Fechamento do flatpickr
+                }
+            });
 
-            // --- Ação de Clicar no Botão "Hoje" ---
             const todayButton = container.querySelector('#today-button');
             const hojeDateStr = container.getAttribute('data-hoje-date');
-
             todayButton.addEventListener('click', () => {
                 loadCalendar(hojeDateStr);
-
-                // Verifica se hoje é segunda-feira
                 const hoje = new Date(hojeDateStr + 'T12:00:00');
-                if (hoje.getDay() === 1) { // 1 é Segunda
+                if (hoje.getDay() === 1) {
                     updateAvisoBanner([], true);
                 } else {
                     loadNotices(hojeDateStr);
                 }
             });
-
-        } // Fim de attachCalendarListeners
-
-
-        // --- LÓGICA 2: VALIDAÇÃO DO FORMULÁRIO (Exemplo) ---
-        // (Esta parte não foi implementada no arquivo original, mas é onde iria)
-
+        }
 
         // --- Inicialização ---
-        // Anexa os listeners ao HTML inicial carregado pelo Thymeleaf
         const initialCalendar = document.getElementById('calendar-fragment');
         if (initialCalendar) {
             attachCalendarListeners(initialCalendar);
