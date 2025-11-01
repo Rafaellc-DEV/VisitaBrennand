@@ -3,70 +3,136 @@ package br.com.projetos3.visita.web;
 import br.com.projetos3.visita.entity.*;
 import br.com.projetos3.visita.service.*;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.DayOfWeek; // IMPORTAR
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set; // IMPORTAR
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
 
     private final AvisoService avisoService;
     private final FeedbackService feedbackService;
-    // REMOVIDO: private final SugestaoService sugestaoService;
 
-    public HomeController(AvisoService a, FeedbackService f){ // REMOVIDO: SugestaoService s
+    public HomeController(AvisoService a, FeedbackService f){
         this.avisoService = a;
         this.feedbackService = f;
-        // REMOVIDO: this.sugestaoService = s;
+    }
+
+    /**
+     * MÉTODO ATUALIZADO: Agora usa o CalendarDayDTO
+     */
+    private void loadCalendarData(Model model, String baseDateStr, Locale locale) {
+        LocalDate baseDate;
+        try {
+            baseDate = LocalDate.parse(baseDateStr);
+        } catch (DateTimeParseException | NullPointerException e) {
+            baseDate = LocalDate.now();
+        }
+
+        LocalDate hoje = LocalDate.now();
+
+        // 1. Definir o intervalo de 7 dias
+        LocalDate startDate = baseDate.minusDays(3);
+        LocalDate endDate = baseDate.plusDays(3);
+
+        // 2. Buscar UMA VEZ as datas que têm avisos nesse intervalo
+        Set<LocalDate> avisoDates = avisoService.findDatesWithAvisos(startDate, endDate);
+
+        // 3. Criar a lista de DTOs
+        List<CalendarDayDTO> calendarDays = new ArrayList<>();
+        for (int i = -3; i <= 3; i++) {
+            LocalDate currentDay = baseDate.plusDays(i);
+            CalendarDayDTO dto = new CalendarDayDTO();
+            dto.setDate(currentDay);
+            dto.setToday(currentDay.isEqual(hoje));
+            dto.setBaseDate(currentDay.isEqual(baseDate)); // Marca o dia central
+
+            // LÓGICA DE DIA FECHADO (Segunda-feira)
+            dto.setClosed(currentDay.getDayOfWeek() == DayOfWeek.MONDAY);
+
+            // LÓGICA DE AVISO (Verifica se a data está no Set)
+            dto.setHasAviso(avisoDates.contains(currentDay));
+
+            calendarDays.add(dto);
+        }
+
+        // 4. Formatar o nome do mês
+        DateTimeFormatter formatadorMes = DateTimeFormatter.ofPattern("MMMM yyyy", locale);
+        String nomeMes = baseDate.format(formatadorMes);
+        nomeMes = nomeMes.substring(0, 1).toUpperCase() + nomeMes.substring(1);
+
+        // 5. Adicionar ao Model
+        model.addAttribute("avisos", avisoService.porData(baseDate)); // Avisos do dia central
+        model.addAttribute("hoje", hoje);
+        model.addAttribute("baseDate", baseDate);
+        model.addAttribute("calendarDays", calendarDays); // Lista de DTOs
+        model.addAttribute("nomeMes", nomeMes);
     }
 
     @GetMapping("/")
     public String index(Model model,
                         @RequestParam(value="ok", required=false) String ok,
-                        @RequestParam(value="erro", required=false) String erro) {
-        List<Aviso> avisos = avisoService.vigentes();
-        LocalDate hoje = LocalDate.now();
+                        @RequestParam(value="erro", required=false) String erro,
+                        @RequestParam(value="date", required=false) String baseDateStr,
+                        Locale locale) {
 
-        List<LocalDate> dias = new ArrayList<>();
-        for (int i = -3; i <= 3; i++) {
-            dias.add(hoje.plusDays(i));
+        loadCalendarData(model, baseDateStr, locale);
+
+        if (!model.containsAttribute("feedback")) {
+            model.addAttribute("feedback", new Feedback());
         }
-
-        DateTimeFormatter formatadorMes = DateTimeFormatter.ofPattern("MMMM", new Locale("pt", "BR"));
-        String nomeMes = hoje.format(formatadorMes);
-        nomeMes = nomeMes.substring(0, 1).toUpperCase() + nomeMes.substring(1);
-
-        model.addAttribute("avisos", avisos);
-        model.addAttribute("hoje", hoje);
-        model.addAttribute("dias", dias);
-        model.addAttribute("nomeMes", nomeMes);
-
-        model.addAttribute("feedback", new Feedback());
-        // REMOVIDO: model.addAttribute("sugestao", new Sugestao());
         model.addAttribute("ok", ok);
         model.addAttribute("erro", erro);
         return "home/index";
     }
+
+    @GetMapping("/api/calendar")
+    public String getCalendarFragment(Model model,
+                                      @RequestParam("date") String date,
+                                      Locale locale) {
+        loadCalendarData(model, date, locale);
+        return "home/index :: calendar-fragment";
+    }
+
 
     @PostMapping("/feedback")
     public String enviarFeedback(@Valid @ModelAttribute("feedback") Feedback feedback,
                                  BindingResult br,
                                  RedirectAttributes ra) {
         if (br.hasErrors()) {
-            ra.addAttribute("erro","home.feedback.erro");
-            return "redirect:/";
+            String erros = br.getFieldErrors().stream()
+                    .map(FieldError::getDefaultMessage)
+                    .collect(Collectors.joining(", "));
+
+            ra.addFlashAttribute("erro", "Erro ao enviar: " + erros);
+            ra.addFlashAttribute("feedback", feedback);
+            ra.addFlashAttribute("org.springframework.validation.BindingResult.feedback", br);
+            return "redirect:/#feedback-form";
         }
         feedbackService.salvar(feedback);
-        ra.addAttribute("ok","home.feedback.ok");
-        return "redirect:/";
+        ra.addFlashAttribute("ok","home.feedback.ok");
+        return "redirect:/#feedback-form";
+    }
+
+    @GetMapping("/api/avisos")
+    @ResponseBody
+    public List<Aviso> getAvisosPorData(
+            @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        return avisoService.porData(data);
     }
 
     @GetMapping("/login")

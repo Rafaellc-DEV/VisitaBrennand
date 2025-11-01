@@ -1,345 +1,903 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Visita Brennand</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{home.titulo}">VISITA BRENNAND</title>
 
-  <!-- Bootstrap -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 
-  <style>
-    body {
-      background-color: #f5f5f5;
-      font-family: "Segoe UI", sans-serif;
-    }
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-    header {
-      text-align: center;
-      background-color: #d9d9d9;
-      padding: 1.2rem;
-      margin-bottom: 1rem;
-    }
+    <style>
+        :root {
+          --color-brand: #294A5D;
+          --color-accent: #A7532C;
+          --color-text-primary: #1A202C;
+          --color-text-secondary: #718096;
+          --color-surface: #F7FAFC;
+          --color-background: #FFFFFF;
+          --color-border: #EDF2F7;
+          --color-success-bg: #F0FFF4;
+          --color-success-icon: #38A169;
+          --color-warning-bg: #FFFBEB;
+          --color-warning-icon: #D69E2E;
+          --color-danger-bg: #FFF5F5;
+          --color-danger-text: #C53030;
 
-    .calendar {
-      background-color: #fff;
-      border-radius: 10px;
-      padding: 1rem;
-      text-align: center;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+          --header-height-desktop: 64px;
+          --header-height-mobile: 56px;
+        }
 
-    .days-grid {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-top: 1rem;
-      flex-wrap: wrap;
-    }
+        body {
+          background-color: var(--color-surface);
+          font-family: 'Inter', system-ui, -apple-system, sans-serif;
+          color: var(--color-text-primary);
+          line-height: 1.6;
+          margin: 0;
+          padding-top: var(--header-height-mobile);
+        }
+        @media (min-width: 769px) {
+            body {
+                padding-top: var(--header-height-desktop);
+            }
+        }
 
-    .day {
-      background-color: #eaeaea;
-      padding: 0.8rem 1rem;
-      border-radius: 8px;
-      min-width: 55px;
-      text-align: center;
-      color: #333;
-      user-select: none;
-    }
 
-    .day.active {
-      background-color: #007bff;
-      color: white;
-      font-weight: bold;
-    }
+        /* ================================================== */
+        /* HEADER ATUALIZADO (com Seletor de Idioma)      */
+        /* ================================================== */
+        .site-header {
+            background-color: var(--color-brand);
+            padding: 0.75rem 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            height: var(--header-height-mobile);
+        }
+        .site-header .container-fluid {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0;
+        }
+        .site-header .site-title {
+            color: #fff;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0;
+            text-decoration: none;
+        }
+        .site-header .site-title:hover {
+            color: rgba(255,255,255,0.8);
+        }
 
-    .feedback-container {
-      background-color: white;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-top: 1rem;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+        /* Container para as ações da direita (apenas o seletor) */
+        .header-actions {
+            display: flex;
+            align-items: center;
+        }
 
-    .error-msg {
-      color: red;
-      font-size: 0.9rem;
-    }
+        /* CSS para o seletor de idioma no header (LARANJA) */
+        .header-actions .lang-switcher-container .dropdown-toggle {
+            color: #fff;
+            background-color: var(--color-accent); /* COR LARANJA */
+            border-color: var(--color-accent); /* COR LARANJA */
+            padding: 0.35rem 0.6rem;
+            font-size: 0.875rem;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .header-actions .lang-switcher-container .dropdown-toggle:hover {
+            color: #fff;
+            background-color: #8c4423; /* Laranja mais escuro no hover */
+            border-color: #8c4423;
+        }
+        .header-actions .lang-switcher-container .dropdown-toggle img {
+            width: 20px;
+            border-radius: 2px;
+            margin-right: 0.5rem !important;
+        }
+        .header-actions .lang-switcher-container .dropdown-toggle span {
+            font-weight: 600;
+            display: none; /* Esconde o "PT" / "EN" em telas pequenas */
+        }
+        .lang-switcher-container .dropdown-menu img {
+            margin-right: 0.5rem !important;
+        }
 
-    .success-msg {
-      color: green;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 1rem;
-    }
 
-    .stars {
-      display: flex;
-      justify-content: center;
-      gap: 0.4rem;
-      font-size: 1.8rem;
-      cursor: pointer;
-    }
+        /* Ajustes do Header para Desktop */
+        @media (min-width: 769px) {
+            .site-header {
+                height: var(--header-height-desktop);
+                padding: 1rem 1rem;
+            }
+            .site-header .site-title {
+                font-size: 1.75rem;
+            }
+            .header-actions .lang-switcher-container .dropdown-toggle {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.9rem;
+            }
+            .header-actions .lang-switcher-container .dropdown-toggle span {
+                display: inline; /* Mostra o "PT" / "EN" em desktop */
+            }
+        }
 
-    .star {
-      color: #ccc;
-      transition: color 0.2s;
-    }
+        /* ================================================== */
+        /* BANNER (Usando a nova foto panorâmica)         */
+        /* ================================================== */
+        .hero-banner-image {
+            width: 100%;
+            height: 25vw;
+            min-height: 140px;
+            max-height: 220px; /* Limite de altura em mobile */
 
-    .star.selected {
-      color: #ffcc00;
-    }
+            background-image: url('/img/banner_panoramico.jpg');
+            background-size: cover;
+            background-position: center 50%;
+            border-bottom: 1px solid var(--color-border);
+            margin-top: var(--header-height-mobile);
+        }
 
-    textarea {
-      resize: none;
-    }
+        @media (min-width: 769px) {
+            .hero-banner-image {
+                /* Altura ajustada para 280px */
+                height: 280px;
+                max-height: 280px; /* Garante a altura */
+                margin-top: var(--header-height-desktop);
+            }
+        }
+        /* ================================================== */
 
-    @media (max-width: 576px) {
-      .day {
-        min-width: 42px;
-        padding: 0.6rem;
-      }
-      .stars {
-        font-size: 1.6rem;
-      }
-    }
-  </style>
+
+        /* ===== Conteúdo principal ===== */
+        .wrap {
+          max-width: 1100px;
+          margin: auto;
+          padding: 1.5rem 1rem 2rem 1rem;
+        }
+
+        .card-ui {
+          background-color: var(--color-background);
+          border: 1px solid var(--color-border);
+          border-radius: 16px;
+          padding: 1.5rem;
+          margin-bottom: 1.5rem;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
+                      0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        .section-title {
+          font-size: 1rem;
+          font-weight: 600;
+          color: var(--color-text-primary);
+          margin-bottom: 1rem;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid var(--color-border);
+          display: block;
+        }
+
+        /* --- Seção de Aviso Dinâmico --- */
+        #aviso-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .status-banner {
+          display: flex;
+          align-items: flex-start;
+          gap: 1rem;
+          border-radius: 12px;
+          padding: 1.25rem;
+          border: 1px solid transparent;
+        }
+
+        .status-banner__icon {
+          flex-shrink: 0;
+          width: 24px;
+          height: 24px;
+          margin-top: 2px;
+        }
+        .status-banner__icon--success { color: var(--color-success-icon); }
+        .status-banner__icon--warning { color: var(--color-warning-icon); }
+
+
+        .status-banner__content p {
+          margin: 0;
+          color: var(--color-text-secondary);
+          font-size: 0.9rem;
+        }
+
+        .status-banner__content strong {
+          color: var(--color-text-primary);
+          display: block;
+        }
+
+        .status-banner--success {
+          background-color: var(--color-success-bg);
+          border-color: #C6F6D5;
+        }
+
+        .status-banner--warning {
+          background-color: var(--color-warning-bg);
+          border-color: #FEEBC8;
+        }
+
+        /* --- Calendário --- */
+        .calendar-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1.5rem;
+        }
+
+        /* Botão do Mês (Flatpickr) */
+        #month-name-button {
+            color: var(--color-text-primary);
+            transition: color 0.2s;
+        }
+        #month-name-button:hover {
+            color: var(--color-accent);
+        }
+
+        .calendar-pills {
+          display: flex;
+          gap: 0.5rem;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .pill {
+          border: 1px solid var(--color-border);
+          border-radius: 10px;
+          padding: .5rem;
+          font-weight: 600;
+          text-align: center;
+          width: 55px;
+          cursor: pointer;
+          transition: all 0.2s ease-in-out;
+          user-select: none;
+          position: relative;
+        }
+        .pill:hover {
+            background-color: #f8f8f8;
+        }
+        .pill.active { /* Dia 'base' selecionado */
+          background-color: var(--color-brand);
+          color: #fff;
+          border-color: var(--color-brand);
+        }
+        .pill.active:hover {
+            background-color: var(--color-brand);
+        }
+
+        /* ESTILO 1: Dia Fechado (Segunda-feira) */
+        .pill.is-closed {
+            opacity: 0.6;
+            background-color: #f9fafb;
+            color: var(--color-text-secondary);
+        }
+        .pill.is-closed:hover {
+            background-color: #f1f5f9;
+        }
+        .pill.is-closed.active {
+            background-color: var(--color-brand);
+            opacity: 0.7;
+        }
+        .pill.is-closed.active:hover {
+            background-color: var(--color-brand);
+        }
+
+        /* ESTILO 2: "Dot" de Aviso */
+        .pill.has-aviso::after {
+            content: '';
+            width: 7px;
+            height: 7px;
+            background-color: var(--color-accent);
+            border-radius: 50%;
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            border: 1px solid var(--color-background);
+        }
+
+        .pill.active.has-aviso::after {
+            background-color: var(--color-surface);
+            border-color: var(--color-brand);
+        }
+
+
+        .pill .day-of-week { font-size: 0.8rem; }
+        .pill .day-of-month { font-size: 1.25rem; font-weight: 700; }
+        .pill .today-label { font-weight:500;font-size:.65rem;margin-top:2px; }
+
+
+        .calendar-arrow {
+          font-size: 1.5rem;
+          color: var(--color-text-secondary);
+          cursor: pointer;
+          padding: 0 0.5rem;
+          user-select: none;
+        }
+        .calendar-arrow:hover {
+            color: var(--color-text-primary);
+        }
+
+        /* --- Formulário --- */
+        .form-label {
+          font-size: 0.875rem;
+          font-weight: 500;
+          margin-bottom: 0.25rem;
+        }
+
+        .form-control, .form-check-input {
+          border-color: var(--color-border);
+        }
+
+        .form-control {
+          border-radius: 8px;
+        }
+
+        .form-control:focus, .form-check-input:focus {
+          border-color: var(--color-brand);
+          box-shadow: 0 0 0 3px rgba(41, 74, 93, .1);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--color-brand);
+            border-color: var(--color-brand);
+        }
+
+        /* Mensagem de erro de validação (para JS) */
+        .validation-error {
+            color: var(--color-danger-text);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            display: none; /* Começa escondido */
+        }
+
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+        .star-rating label {
+            font-size: 2rem;
+            color: #E2E8F0;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+        .star-rating input[type="radio"]:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #FBBF24;
+        }
+
+        /* CSS Rádio mais visível */
+        #feedback-form .form-check-input {
+            width: 1.25em;
+            height: 1.25em;
+            margin-top: 0.2em;
+        }
+        #feedback-form .form-check-label {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-left: 0.25rem;
+            cursor: pointer;
+        }
+        #feedback-form .form-check {
+             display: flex;
+             align-items: center;
+        }
+
+
+        .btn-brand {
+          background-color: var(--color-accent);
+          border-color: var(--color-accent);
+          color: #fff;
+          font-weight: 600;
+          border-radius: 8px;
+          padding: 0.75rem 1.5rem;
+          transition: background-color 0.2s;
+        }
+        .btn-brand:hover {
+            background-color: #8c4423;
+            border-color: #8c4423;
+            color: #fff;
+        }
+
+        .bottom-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1.5rem;
+        }
+
+        /* --- Alertas de Feedback (Sucesso/Erro) --- */
+        .alert-container {
+            margin-top: 1.5rem;
+        }
+        .alert-success {
+            background-color: var(--color-success-bg);
+            color: var(--color-success-icon);
+            border-color: #C6F6D5;
+        }
+        .alert-danger {
+            background-color: var(--color-danger-bg);
+            color: var(--color-danger-text);
+            border-color: #FED7D7;
+        }
+
+        /* --- Rodapé --- */
+        .footer {
+          background-color: var(--color-brand);
+          color: #fff;
+          padding: 3rem 1rem;
+          margin-top: 2rem;
+        }
+        .footer a { color: #E2E8F0; text-decoration: none; transition: color 0.2s; }
+        .footer a:hover { color: #fff; text-decoration: underline; }
+        .footer-logo { max-width: 180px; margin-bottom: 1.5rem; }
+        .footer-section-title { font-weight: 600; margin-bottom: 1rem; color: #fff; font-size: 1.1rem; }
+        .footer-links li { margin-bottom: 0.5rem; }
+        .social-icons a { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.1); margin-right: 0.5rem; }
+        .social-icons a:hover { background-color: var(--color-accent); text-decoration: none; }
+        .social-icons svg { width: 20px; height: 20px; }
+        .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.2); margin-top: 2rem; padding-top: 2rem; font-size: 0.875rem; color: #A0AEC0; }
+
+        @media (max-width: 768px) {
+          .wrap { padding: 1rem 0; }
+          .card-ui, #aviso-container {
+            margin-bottom: 1rem;
+            border-radius: 0;
+            border-left: 0;
+            border-right: 0;
+          }
+          .calendar-header { flex-direction: row; align-items: center; gap: 0.5rem; }
+          .pill:nth-of-type(1), .pill:nth-of-type(7) { display: none; }
+          .bottom-grid { grid-template-columns: 1fr; }
+        }
+
+    </style>
 </head>
-
 <body>
-  <header>
-    <h2>VISITA BRENNAND</h2>
-    <p>LOGO</p>
-  </header>
 
-  <main class="container">
- 
-    <div class="calendar">
-      <h4 id="mesAtual">Mês</h4>
-      <div class="days-grid" id="daysContainer"></div>
+<header class="site-header position-fixed">
+    <div class="container-fluid">
+        <a th:href="@{/}" class="site-title" th:text="#{home.titulo}">VISITA BRENNAND</a>
+
+        <nav class="header-actions d-flex align-items-center">
+            <div class="lang-switcher-container dropdown">
+                <button class="btn dropdown-toggle btn-sm d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="lang-switcher-button">
+                    <th:block th:if="${#locale.language == 'en'}">
+                        <img src="https://flagcdn.com/w20/us.png" alt="USA Flag"><span>EN</span>
+                    </th:block>
+                    <th:block th:unless="${#locale.language == 'en'}">
+                        <img src="https://flagcdn.com/w20/br.png" alt="Bandeira do Brasil"><span>PT</span>
+                    </th:block>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item d-flex align-items-center" href="?lang=pt"><img src="https://flagcdn.com/w20/br.png" class="me-2" alt=""><span>Português</span></a></li>
+                    <li><a class="dropdown-item d-flex align-items-center" href="?lang=en"><img src="https://flagcdn.com/w20/us.png" class="me-2" alt=""><span>English</span></a></li>
+                </ul>
+            </div>
+        </nav>
     </div>
+</header>
 
-   
-    <div class="card shadow-sm mb-3">
-      <div class="card-body text-center" id="aviso">
-        <p class="mb-0"><strong id="dataAtualTexto"></strong></p>
-        <p>Parque <strong>fechado</strong> hoje!</p>
-        <small>
-          Informamos que o parque estará fechado hoje em razão da maré alta,
-          visando sua segurança.<br />Agradecemos a compreensão.
-        </small>
-      </div>
-    </div>
+<section class="hero-banner-image" aria-label="Banner do Parque de Esculturas Francisco Brennand"></section>
 
-   
-    <div class="card shadow-sm mb-3">
-      <div class="card-body">
-        <h5 class="card-title fw-bold">HORÁRIOS DE FUNCIONAMENTO</h5>
-        <p class="mb-1">Terça a Sexta-feira: 09:00 às 16:00</p>
-        <p>Sábado e Domingo: 08:00 às 16:00</p>
-      </div>
-    </div>
 
-    
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <h5 class="card-title fw-bold">REGRAS DE VISITAÇÃO</h5>
-            <ul>
-              <li>Crianças com responsáveis</li>
-              <li>Jogue lixo nas lixeiras</li>
-              <li>Proibido fumar</li>
-              <li>Sem drones</li>
-            </ul>
-          </div>
+<div class="wrap">
+    <main>
+
+        <div id="calendar-container">
+            <div id="calendar-fragment"
+                 class="card-ui"
+                 th:fragment="calendar-fragment"
+                 th:attr="data-base-date=${baseDate.toString()}, data-hoje-date=${hoje.toString()}">
+
+                <div class="calendar-header">
+                    <div class="d-flex align-items-center gap-2">
+                        <button id="month-name-button"
+                                class="btn btn-link fs-5 fw-bold p-0 text-decoration-none"
+                                style="color: var(--color-text-primary);"
+                                type="button"
+                                th:text="${nomeMes}">
+                            Outubro 2025
+                        </button>
+                        <button id="today-button" class="btn btn-sm btn-outline-secondary" type="button" title="Voltar para hoje">
+                            <i class="bi bi-calendar-event"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="calendar-pills">
+                    <span class="calendar-arrow" id="prev-days" aria-label="Anterior">&lt;</span>
+
+                    <th:block th:each="day : ${calendarDays}">
+                        <div class="pill pill-date"
+                             th:classappend="(${day.isBaseDate} ? ' active' : '') +
+                                              (${day.isClosed} ? ' is-closed' : '') +
+                                              (${day.hasAviso} ? ' has-aviso' : '')"
+                             th:attr="data-date=${day.date.toString()}">
+
+                            <div class="day-of-week" th:text="${#strings.capitalize(#temporals.format(day.date, 'E', #locale.forLanguageTag('pt-BR')))}"></div>
+                            <strong class="day-of-month" th:text="${#temporals.format(day.date, 'dd')}"></strong>
+                            <div th:if="${day.isToday}" class="today-label">HOJE</div>
+                        </div>
+                    </th:block>
+
+                    <span class="calendar-arrow" id="next-days" aria-label="Próximo">&gt;</span>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <div class="col-md-6 mb-3">
-        <div class="feedback-container">
-          <h5 class="fw-bold text-center mb-3">AVALIE SUA EXPERIÊNCIA!</h5>
 
-          <form id="feedbackForm">
-            <div class="mb-3">
-              <label for="nome" class="form-label">Nome:</label>
-              <input
-                type="text"
-                class="form-control"
-                id="nome"
-                maxlength="80"
-                required
-              />
-              <div class="error-msg" id="erroNome"></div>
+        <div id="aviso-container">
+            <div th:if="${!#lists.isEmpty(avisos)}" class="status-banner status-banner--warning">
+                <div class="status-banner__icon status-banner__icon--warning"><i class="bi bi-exclamation-triangle-fill"></i></div>
+                <div class="status-banner__content">
+                    <strong th:utext="${avisos.get(0).texto}"></strong>
+                    <p th:text="#{home.aviso}">AVISO</p>
+                </div>
             </div>
 
-            <div class="mb-3">
-              <label for="comentario" class="form-label">Comentário:</label>
-              <textarea
-                class="form-control"
-                id="comentario"
-                rows="3"
-                maxlength="1000"
-                required
-              ></textarea>
-              <div class="error-msg" id="erroComentario"></div>
+            <div th:if="${#lists.isEmpty(avisos) and baseDate.dayOfWeek.value == 1}" class="status-banner status-banner--warning">
+                <div class="status-banner__icon status-banner__icon--warning"><i class="bi bi-calendar-x-fill"></i></div>
+                <div class="status-banner__content">
+                    <strong th:text="#{home.aviso.parque_fechado}"></strong>
+                    <p th:text="#{home.aviso.parque_fechado_desc}"></p>
+                </div>
             </div>
 
-            <div class="mb-3 text-center">
-              <label class="form-label d-block mb-2">Nota:</label>
-              <div class="stars" id="stars">
-                <span class="star" data-value="1">&#9733;</span>
-                <span class="star" data-value="2">&#9733;</span>
-                <span class="star" data-value="3">&#9733;</span>
-                <span class="star" data-value="4">&#9733;</span>
-                <span class="star" data-value="5">&#9733;</span>
-              </div>
-              <div class="error-msg" id="erroNota"></div>
+            <div th:if="${#lists.isEmpty(avisos) and baseDate.dayOfWeek.value != 1}" class="status-banner status-banner--success">
+                <div class="status-banner__icon status-banner__icon--success"><i class="bi bi-check-circle-fill"></i></div>
+                <div class="status-banner__content">
+                    <strong th:text="#{home.aviso.parque_aberto}"></strong>
+                    <p>Informação institucional padrão.</p>
+                </div>
             </div>
-
-            <button
-              type="submit"
-              class="btn btn-primary w-100"
-              id="btnEnviar"
-              disabled
-            >
-              ENVIAR
-            </button>
-            <div id="mensagemSucesso" class="success-msg"></div>
-          </form>
         </div>
-      </div>
+
+
+        <section class="card-ui">
+            <h5 class="section-title" th:text="#{home.horarios}"></h5>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p class="mb-1"><strong>Terça a Sexta-feira</strong><br><span class="text-muted">(09:00 às 16:00)</span></p>
+                </div>
+                <div class="col-sm-6">
+                    <p class="mb-0"><strong>Sábado e Domingo</strong><br><span class="text-muted">(08:00 às 16:00)</span></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bottom-grid">
+            <div class="card-ui">
+                <h5 class="section-title" th:text="#{home.regras}"></h5>
+                <ul class="mb-0 ps-3 text-secondary">
+                    <li>Crianças com responsáveis</li>
+                    <li>Jogue lixo nas lixeiras</li>
+                    <li>Proibido fumar</li>
+                    <li>Sem drones</li>
+                </ul>
+            </div>
+
+            <div class="card-ui" id="feedback-form">
+                <form method="post" th:action="@{/feedback}" th:object="${feedback}" id="formFeedback">
+                    <h5 class="section-title text-center" th:text="#{home.feedback}"></h5>
+                    <input th:if="${_csrf}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                    <div class="mb-3">
+                        <label class="form-label d-block text-center">Nota</label>
+                        <div class="star-rating">
+                            <input type="radio" id="s5" th:field="*{nota}" value="5" /><label for="s5">★</label>
+                            <input type="radio" id="s4" th:field="*{nota}" value="4" /><label for="s4">★</label>
+                            <input type="radio" id="s3" th:field="*{nota}" value="3" /><label for="s3">★</label>
+                            <input type="radio" id="s2" th:field="*{nota}" value="2" /><label for="s2">★</label>
+                            <input type="radio" id="s1" th:field="*{nota}" value="1" /><label for="s1">★</label>
+                        </div>
+                        <div class="validation-error text-center" id="error-nota"></div>
+                        <div th:if="${#fields.hasErrors('nota')}" class="invalid-feedback d-block text-center" th:errors="*{nota}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="fb-nome" th:text="#{home.nome}"></label>
+                        <input type="text" id="fb-nome" th:field="*{nome}" class="form-control"
+                               placeholder="Seu nome completo"
+                               th:errorclass="is-invalid" />
+                        <div class="validation-error" id="error-nome"></div>
+                        <div th:if="${#fields.hasErrors('nome')}" class="invalid-feedback d-block" th:errors="*{nome}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" th:text="#{home.tipo}"></label>
+                        <div class="d-flex gap-4">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="fb-tipo-sugestao" th:field="*{tipo}" value="Sugestão" th:errorclass="is-invalid" />
+                                <label class="form-check-label" for="fb-tipo-sugestao" th:text="#{home.tipo.sugestao}"></label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="fb-tipo-reclamacao" th:field="*{tipo}" value="Reclamação" th:errorclass="is-invalid" />
+                                <label class="form-check-label" for="fb-tipo-reclamacao" th:text="#{home.tipo.reclamacao}"></label>
+                            </div>
+                        </div>
+                        <div class="validation-error" id="error-tipo"></div>
+                        <div th:if="${#fields.hasErrors('tipo')}" class="invalid-feedback d-block" th:errors="*{tipo}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="fb-coment" th:text="#{home.comentario}"></label>
+                        <textarea id="fb-coment" th:field="*{comentario}" class="form-control" rows="4"
+                                  placeholder="Deixe seu comentário..."
+                                  th:errorclass="is-invalid"></textarea>
+                        <div class="validation-error" id="error-comentario"></div>
+                        <div th:if="${#fields.hasErrors('comentario')}" class="invalid-feedback d-block" th:errors="*{comentario}"></div>
+                    </div>
+
+                    <button class="btn btn-brand w-100" type="submit" id="btnEnviarFeedback" th:text="#{home.enviar}"></button>
+                </form>
+            </div>
+        </section>
+
+        <section class="card-ui">
+            <h5 class="section-title" th:text="#{home.comochegar.titulo}">Como chegar</h5>
+
+            <strong style="color: var(--color-text-primary);" th:text="#{home.comochegar.catamara.titulo}">Catamarã:</strong>
+            <p class="mb-2 text-secondary" style="font-size: 0.95rem;">
+                <span th:text="#{home.comochegar.catamara.local}">Local: Cais Santa Rita, s/n – São José, Recife – PE, São José</span><br>
+                <a href="https://reservas.catamarantours.com.br/" target="_blank" rel="noopener noreferrer">https://reservas.catamarantours.com.br/</a>
+            </p>
+
+            <strong style="color: var(--color-text-primary);" th:text="#{home.comochegar.barqueiros.titulo}">Barqueiros do Marco Zero:</strong>
+            <p class="mb-1 text-secondary" style="font-size: 0.95rem;">
+                <span th:text="#{home.comochegar.barqueiros.preco1}">R$ 5,00 por trecho</span><br>
+                <span th:text="#{home.comochegar.barqueiros.preco2}">R$ 6,00 por trecho com bicicleta</span>
+            </p>
+        </section>
+        <div class="alert-container">
+            <div class="alert alert-success" th:if="${ok}" th:text="#{${ok}}" role="alert"></div>
+            <div class="alert alert-danger" th:if="${erro}" th:text="${erro}" role="alert"></div>
+        </div>
+    </main>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                <h5 class="footer-section-title">Visita Brennand</h5>
+                <p class="small text-white-50">Uma nova experiência de visitação no Parque de Esculturas Francisco Brennand.</p>
+                <div class="social-icons mt-3">
+                    <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
+                <h5 class="footer-section-title">Navegação</h5>
+                <ul class="list-unstyled footer-links">
+                    <li><a href="#">Início</a></li>
+                    <li><a href="#">Horários</a></li>
+                    <li><a href="#">Regras</a></li>
+                    <li><a href="#feedback-form">Avalie-nos</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <h5 class="footer-section-title">Contato</h5>
+                <ul class="list-unstyled footer-links small">
+                    <li>Parque de Esculturas Francisco Brennand</li>
+                    <li>Av. Brasília, s/n - Brasília Teimosa</li>
+                    <li>Recife - PE, 51010-145</li>
+                    <li class="mt-2"><a href="mailto:contato@brennand.org.br">contato@brennand.org.br</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <h5 class="footer-section-title">Acesso Restrito</h5>
+                <ul class="list-unstyled footer-links">
+                    <li><a th:href="@{/admin}">Login do Gestor</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row footer-bottom">
+            <div class="col-md-6">
+                <p>&copy; 2025 Visita Brennand. Todos os direitos reservados.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p>Desenvolvido como projeto acadêmico.</p>
+            </div>
+        </div>
     </div>
-  </main>
+</footer>
 
- 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
-    const form = document.getElementById("feedbackForm");
-    const btnEnviar = document.getElementById("btnEnviar");
-    const sucesso = document.getElementById("mensagemSucesso");
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
 
-    const campos = {
-      nome: document.getElementById("nome"),
-      comentario: document.getElementById("comentario"),
-    };
 
-    const erros = {
-      nome: document.getElementById("erroNome"),
-      nota: document.getElementById("erroNota"),
-      comentario: document.getElementById("erroComentario"),
-    };
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
 
-    let notaSelecionada = 0;
+        // --- LÓGICA 1: CALENDÁRIO DINÂMICO ---
 
-  
-    document.querySelectorAll(".star").forEach((star) => {
-      star.addEventListener("click", () => {
-        notaSelecionada = parseInt(star.getAttribute("data-value"));
-        document
-          .querySelectorAll(".star")
-          .forEach((s, i) =>
-            s.classList.toggle("selected", i < notaSelecionada)
-          );
-        validarCampos();
-      });
-    });
+        const calendarContainer = document.getElementById('calendar-container');
+        const avisoContainer = document.getElementById('aviso-container');
 
-   
-    function validarCampos() {
-      let valido = true;
-      sucesso.textContent = "";
+        // Textos i18n para os avisos do JS
+        const textoPadraoTitulo = /*[[#{home.aviso.parque_aberto}]]*/ 'Parque Aberto';
+        const textoPadraoSub = 'Informação institucional padrão.';
+        const textoFechadoTitulo = /*[[#{home.aviso.parque_fechado}]]*/ 'Parque Fechado';
+        const textoFechadoDesc = /*[[#{home.aviso.parque_fechado_desc}]]*/ 'O parque não abre às segundas-feiras.';
 
-      if (
-        campos.nome.value.trim().length < 2 ||
-        campos.nome.value.trim().length > 80
-      ) {
-        erros.nome.textContent = "O Nome deve ter entre 2 e 80 caracteres.";
-        valido = false;
-      } else {
-        erros.nome.textContent = "";
-      }
+        /**
+         * (Re)carrega o fragmento do calendário a partir do servidor
+         */
+        async function loadCalendar(dateStr) {
+            try {
+                const response = await fetch(`/api/calendar?date=${dateStr}`);
+                if (!response.ok) throw new Error('Falha ao carregar calendário');
+                const html = await response.text();
 
-      if (notaSelecionada === 0) {
-        erros.nota.textContent = "Selecione uma nota.";
-        valido = false;
-      } else {
-        erros.nota.textContent = "";
-      }
+                // Substitui o HTML DENTRO do container estático
+                calendarContainer.innerHTML = html;
 
-      if (campos.comentario.value.trim().length < 5) {
-        erros.comentario.textContent =
-          "O Comentário deve ter pelo menos 5 caracteres.";
-        valido = false;
-      } else {
-        erros.comentario.textContent = "";
-      }
+                // Pega o NOVO fragmento que acabou de ser inserido
+                const newFragment = calendarContainer.querySelector('#calendar-fragment');
 
-      btnEnviar.disabled = !valido;
-    }
+                // Re-anexa todos os listeners ao novo HTML
+                attachCalendarListeners(newFragment);
+            } catch (error) {
+                console.error('Erro ao carregar calendário:', error);
+            }
+        }
 
-    Object.values(campos).forEach((campo) =>
-      campo.addEventListener("input", validarCampos)
-    );
+        /**
+         * Carrega os avisos (JSON) para uma data específica
+         */
+        async function loadNotices(dateStr) {
+            try {
+                const response = await fetch(`/api/avisos?data=${dateStr}`);
+                if (!response.ok) throw new Error('Falha ao buscar avisos');
+                const avisos = await response.json();
 
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      validarCampos();
+                // Atualiza o banner de avisos (caso 'isClosed' seja falso)
+                updateAvisoBanner(avisos, false);
 
-      if (!btnEnviar.disabled) {
-        sucesso.textContent = "Feedback enviado com sucesso!";
-        form.reset();
-        notaSelecionada = 0;
-        document.querySelectorAll(".star").forEach((s) =>
-          s.classList.remove("selected")
-        );
-        btnEnviar.disabled = true;
-      }
-    });
+            } catch (error) {
+                console.error('Erro ao buscar avisos:', error);
+                updateAvisoBanner([], false); // Mostra aviso padrão em caso de erro
+            }
+        }
 
-    //Geração do carrossel de dias 
-    function gerarCarrosselDias() {
-      const container = document.getElementById("daysContainer");
-      const mesAtual = document.getElementById("mesAtual");
-      container.innerHTML = "";
+        /**
+         * Atualiza o HTML do banner de avisos
+         */
+        function updateAvisoBanner(avisos, isClosed) {
+            let html;
 
-      const agora = new Date();
-      const fusoAgora = new Date(
-        agora.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" })
-      );
+            if (isClosed) {
+                // NOVO CASO: Dia de Segunda-feira (Fechado)
+                html = `
+                <div class="status-banner status-banner--warning">
+                    <div class="status-banner__icon status-banner__icon--warning"><i class="bi bi-calendar-x-fill"></i></div>
+                    <div class="status-banner__content">
+                        <strong>${textoFechadoTitulo}</strong>
+                        <p>${textoFechadoDesc}</p>
+                    </div>
+                </div>`;
+            }
+            else if (avisos && avisos.length > 0) {
+                // CASO 1: Dia com Aviso
+                const textoAviso = avisos[0].texto;
+                html = `
+                <div class="status-banner status-banner--warning">
+                    <div class="status-banner__icon status-banner__icon--warning"><i class="bi bi-exclamation-triangle-fill"></i></div>
+                    <div class="status-banner__content">
+                        <strong>${textoAviso}</strong>
+                        <p>AVISO</p>
+                    </div>
+                </div>`;
+            } else {
+                // CASO 2: Dia normal, sem aviso (Aberto)
+                html = `
+                <div class="status-banner status-banner--success">
+                    <div class="status-banner__icon status-banner__icon--success"><i class="bi bi-check-circle-fill"></i></div>
+                    <div class="status-banner__content">
+                        <strong>${textoPadraoTitulo}</strong>
+                        <p>${textoPadraoSub}</p>
+                    </div>
+                </div>`;
+            }
+            avisoContainer.innerHTML = html;
+        }
 
-      const diaAtual = fusoAgora.getDate();
-      const mes = fusoAgora.getMonth();
-      const ano = fusoAgora.getFullYear();
+        /**
+         * Anexa TODOS os listeners de evento ao container do calendário
+         * (LÓGICA ATUALIZADA E CORRIGIDA)
+         */
+        function attachCalendarListeners(container) {
 
-      const nomesMeses = [
-        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-      ];
-      mesAtual.textContent = nomesMeses[mes];
+            // --- Ação das Setas (Navegação de 7 dias) ---
+            container.querySelector('#prev-days').addEventListener('click', () => {
+                // LÊ a data base ATUAL do HTML no momento do clique
+                const currentBaseDateStr = container.getAttribute('data-base-date');
+                const date = new Date(currentBaseDateStr + 'T12:00:00'); // Adiciona T12 para evitar fuso
 
-      for (let i = -3; i <= 3; i++) {
-        const novaData = new Date(ano, mes, diaAtual + i);
-        const dia = novaData.getDate();
-        const div = document.createElement("div");
-        div.classList.add("day");
-        if (i === 0) div.classList.add("active");
-        div.textContent = dia;
-        container.appendChild(div);
-      }
+                date.setDate(date.getDate() - 7);
+                const newDateStr = date.toISOString().split('T')[0];
 
-      const dia = String(fusoAgora.getDate()).padStart(2, "0");
-      const mesStr = String(fusoAgora.getMonth() + 1).padStart(2, "0");
-      const anoStr = fusoAgora.getFullYear();
-      document.getElementById("dataAtualTexto").textContent = `${dia}/${mesStr}/${anoStr}`;
-    }
+                loadCalendar(newDateStr);
+                loadNotices(newDateStr);
+            });
 
-    gerarCarrosselDias();
-  </script>
-</body>
-</html>
+            container.querySelector('#next-days').addEventListener('click', () => {
+                // LÊ a data base ATUAL do HTML no momento do clique
+                const currentBaseDateStr = container.getAttribute('data-base-date');
+                const date = new Date(currentBaseDateStr + 'T12:00:00');
+
+                date.setDate(date.getDate() + 7);
+                const newDateStr = date.toISOString().split('T')[0];
+
+                loadCalendar(newDateStr);
+                loadNotices(newDateStr);
+            });
+
+            // --- Ação de Clicar no Dia (Pill) ---
+            container.querySelectorAll('.pill-date').forEach(pill => {
+                pill.addEventListener('click', function() {
+
+                    const clickedDateStr = this.getAttribute('data-date');
+                    const currentBaseDateStr = container.getAttribute('data-base-date');
+
+                    // Centraliza o calendário no dia clicado
+                    if (clickedDateStr !== currentBaseDateStr) {
+                        loadCalendar(clickedDateStr);
+                    }
+
+                    // MUDANÇA: Ação de clique de dia fechado
+                    if (this.classList.contains('is-closed')) {
+                        // Se for segunda-feira, mostra o aviso de FECHADO
+                        updateAvisoBanner([], true);
+                    } else {
+                        // Se for dia normal, busca avisos da API
+                        loadNotices(clickedDateStr);
+                    }
+                });
+            });
+
+            // --- Ação de Clicar no Mês (Flatpickr) ---
+            const monthButton = container.querySelector('#month-name-button');
+            const currentBaseDateStr = container.getAttribute('data-base-date');
+
+            flatpickr(monthButton, {
+                locale: "pt",
+                defaultDate: currentBaseDateStr,
+                disable: [
+                    function(date) {
+                        return (date.getDay() === 1); // Desabilita segundas-feiras
+                    }
+                ],
+                onChange: function(selectedDates, dateStr, instance) {
+                    loadCalendar(dateStr);
+                    // Verifica se o dia selecionado é segunda-feira
+                    if (selectedDates[0].getDay() === 1) {
+                        updateAvisoBanner([], true);
