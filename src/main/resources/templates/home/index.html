@@ -121,24 +121,38 @@
                 display: inline;
             }
         }
+
+        /* ==================================================== */
+        /* MUDANÇA #1 (CSS DO BANNER)                           */
+        /* ==================================================== */
         .hero-banner-image {
             width: 100%;
             height: 25vw;
             min-height: 140px;
             max-height: 220px;
             background-image: url('/img/banner_panoramico.jpg');
-            background-size: cover;
+
+            /* MUDANÇA: de 'cover' para 'contain' (evita esticar/cortar) */
+            background-size: contain;
+            background-repeat: no-repeat; /* Necessário para 'contain' */
+
             background-position: center 50%;
             border-bottom: 1px solid var(--color-border);
-            margin-top: var(--header-height-mobile);
+            /* margin-top: var(--header-height-mobile); -> REMOVIDO */
+            background-color: #E2E8F0; /* Cor de fundo para preencher espaço */
         }
+
         @media (min-width: 769px) {
             .hero-banner-image {
                 height: 280px;
                 max-height: 280px;
-                margin-top: var(--header-height-desktop);
+                /* margin-top: var(--header-height-desktop); -> REMOVIDO */
             }
         }
+        /* ==================================================== */
+        /* FIM DA MUDANÇA #1                                    */
+        /* ==================================================== */
+
         .wrap {
           max-width: 1100px;
           margin: auto;
@@ -164,6 +178,7 @@
         }
         #aviso-container {
             margin-bottom: 1.5rem;
+            min-height: 1px;
         }
         .status-banner {
           display: flex;
@@ -181,6 +196,8 @@
         }
         .status-banner__icon--success { color: var(--color-success-icon); }
         .status-banner__icon--warning { color: var(--color-warning-icon); }
+        .status-banner__icon--danger { color: var(--color-danger-text); }
+
         .status-banner__content p {
           margin: 0;
           color: var(--color-text-secondary);
@@ -190,6 +207,12 @@
           color: var(--color-text-primary);
           display: block;
         }
+        .status-banner__content .fechado-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--color-danger-text);
+        }
+
         .status-banner--success {
           background-color: var(--color-success-bg);
           border-color: #C6F6D5;
@@ -198,6 +221,11 @@
           background-color: var(--color-warning-bg);
           border-color: #FEEBC8;
         }
+        .status-banner--danger {
+          background-color: var(--color-danger-bg);
+          border-color: #FED7D7;
+        }
+
         .calendar-header {
           display: flex;
           justify-content: space-between;
@@ -391,9 +419,13 @@
         .social-icons svg { width: 20px; height: 20px; }
         .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.2); margin-top: 2rem; padding-top: 2rem; font-size: 0.875rem; color: #A0AEC0; }
 
+        /* ==================================================== */
+        /* MUDANÇA #2 (RESPONSIVO)                              */
+        /* ==================================================== */
         @media (max-width: 768px) {
           .wrap { padding: 1rem 0; }
-          .card-ui, #aviso-container {
+          /* .status-banner foi adicionado aqui */
+          .card-ui, #aviso-container, .status-banner {
             margin-bottom: 1rem;
             border-radius: 0;
             border-left: 0;
@@ -403,11 +435,10 @@
           .pill:nth-of-type(1), .pill:nth-of-type(7) { display: none; }
           .bottom-grid { grid-template-columns: 1fr; }
         }
+        /* ==================================================== */
+        /* FIM DA MUDANÇA #2                                    */
+        /* ==================================================== */
 
-        /* CSS ADICIONAL:
-          Garante que o conteúdo das regras (listas, p)
-          não tenha margens estranhas
-        */
         .regras-content p:last-child,
         .regras-content ul:last-child,
         .regras-content ol:last-child {
@@ -492,29 +523,44 @@
 
 
         <div id="aviso-container">
-            <div th:if="${!#lists.isEmpty(avisos)}" class="status-banner status-banner--warning">
-                <div class="status-banner__icon status-banner__icon--warning"><i class="bi bi-exclamation-triangle-fill"></i></div>
-                <div class="status-banner__content">
-                    <strong th:utext="${avisos.get(0).texto}"></strong>
-                    <p th:text="#{home.aviso}">AVISO</p>
-                </div>
-            </div>
 
-            <div th:if="${#lists.isEmpty(avisos) and baseDate.dayOfWeek.value == 1}" class="status-banner status-banner--warning">
-                <div class="status-banner__icon status-banner__icon--warning"><i class="bi bi-calendar-x-fill"></i></div>
-                <div class="status-banner__content">
-                    <strong th:text="#{home.aviso.parque_fechado}"></strong>
-                    <p th:text="#{home.aviso.parque_fechado_desc}"></p>
-                </div>
-            </div>
+            <th:block th:if="${!#lists.isEmpty(avisos)}">
 
-            <div th:if="${#lists.isEmpty(avisos) and baseDate.dayOfWeek.value != 1}" class="status-banner status-banner--success">
-                <div class="status-banner__icon status-banner__icon--success"><i class="bi bi-check-circle-fill"></i></div>
-                <div class="status-banner__content">
-                    <strong th:text="#{home.aviso.parque_aberto}"></strong>
-                    <p>Informação institucional padrão.</p>
+                <div th:if="${!avisos.get(0).ativo}" class="status-banner status-banner--danger">
+                    <div class="status-banner__icon status-banner__icon--danger"><i class="bi bi-calendar-x-fill"></i></div>
+                    <div class="status-banner__content">
+                        <strong class="fechado-title">FECHADO NESTE DIA</strong>
+                        <p th:utext="${avisos.get(0).texto}"></p>
+                    </div>
                 </div>
-            </div>
+
+                <div th:if="${avisos.get(0).ativo}" class="status-banner status-banner--warning">
+                    <div class="status-banner__icon status-banner__icon--warning"><i class="bi bi-exclamation-triangle-fill"></i></div>
+                    <div class="status-banner__content">
+                        <strong th:utext="${avisos.get(0).texto}"></strong>
+                        <p th:text="#{home.aviso}">AVISO</p>
+                    </div>
+                </div>
+            </th:block>
+
+            <th:block th:if="${#lists.isEmpty(avisos)}">
+
+                <div th:if="${baseDate.dayOfWeek.value == 1}" class="status-banner status-banner--danger">
+                    <div class="status-banner__icon status-banner__icon--danger"><i class="bi bi-calendar-x-fill"></i></div>
+                    <div class="status-banner__content">
+                        <strong class="fechado-title" th:text="#{home.aviso.parque_fechado}"></strong>
+                        <p th:text="#{home.aviso.parque_fechado_desc}"></p>
+                    </div>
+                </div>
+
+                <div th:if="${baseDate.dayOfWeek.value != 1}" class="status-banner status-banner--success">
+                    <div class="status-banner__icon status-banner__icon--success"><i class="bi bi-check-circle-fill"></i></div>
+                    <div class="status-banner__content">
+                        <strong th:text="#{home.aviso.parque_aberto}"></strong>
+                        <p>Informação institucional padrão.</p>
+                    </div>
+                </div>
+            </th:block>
         </div>
 
 
@@ -699,6 +745,7 @@
         // --- LÓGICA 1: CALENDÁRIO DINÂMICO ---
         const calendarContainer = document.getElementById('calendar-container');
         const avisoContainer = document.getElementById('aviso-container');
+
         const textoPadraoTitulo = /*[[#{home.aviso.parque_aberto}]]*/ 'Parque Aberto';
         const textoPadraoSub = 'Informação institucional padrão.';
         const textoFechadoTitulo = /*[[#{home.aviso.parque_fechado}]]*/ 'Parque Fechado';
@@ -717,49 +764,74 @@
             }
         }
 
-        async function loadNotices(dateStr) {
+        async function loadNotices(dateStr, isMonday = false) {
             try {
                 const response = await fetch(`/api/avisos?data=${dateStr}`);
                 if (!response.ok) throw new Error('Falha ao buscar avisos');
                 const avisos = await response.json();
-                updateAvisoBanner(avisos, false);
+                updateAvisoBanner(avisos, isMonday);
             } catch (error) {
                 console.error('Erro ao buscar avisos:', error);
-                updateAvisoBanner([], false);
+                updateAvisoBanner([], isMonday);
             }
         }
 
-        function updateAvisoBanner(avisos, isClosed) {
+        // --- FUNÇÃO ATUALIZADA (updateAvisoBanner) ---
+        function updateAvisoBanner(avisos, isMonday) {
             let html;
-            if (isClosed) {
-                html = `
-                <div class="status-banner status-banner--warning">
-                    <div class="status-banner__icon status-banner__icon--warning"><i class="bi bi-calendar-x-fill"></i></div>
-                    <div class="status-banner__content">
-                        <strong>${textoFechadoTitulo}</strong>
-                        <p>${textoFechadoDesc}</p>
-                    </div>
-                </div>`;
+            const textoAvisoPadrao = /*[[#{home.aviso}]]*/ 'AVISO';
+
+            // 1. Se a API retornou um aviso
+            if (avisos && avisos.length > 0) {
+                const aviso = avisos[0];
+
+                // 1a. Se o aviso for 'inativo' (Fechado)
+                if (!aviso.ativo) {
+                    html = `
+                    <div class="status-banner status-banner--danger">
+                        <div class="status-banner__icon status-banner__icon--danger"><i class="bi bi-calendar-x-fill"></i></div>
+                        <div class="status-banner__content">
+                            <strong class="fechado-title">FECHADO NESTE DIA</strong>
+                            <p>${aviso.texto}</p>
+                        </div>
+                    </div>`;
+                }
+                // 1b. Se o aviso for 'ativo' (Aberto com aviso)
+                else {
+                    html = `
+                    <div class="status-banner status-banner--warning">
+                        <div class="status-banner__icon status-banner__icon--warning"><i class="bi bi-exclamation-triangle-fill"></i></div>
+                        <div class="status-banner__content">
+                            <strong>${aviso.texto}</strong>
+                            <p>${textoAvisoPadrao}</p>
+                        </div>
+                    </div>`;
+                }
             }
-            else if (avisos && avisos.length > 0) {
-                const textoAviso = avisos[0].texto;
-                html = `
-                <div class="status-banner status-banner--warning">
-                    <div class="status-banner__icon status-banner__icon--warning"><i class="bi bi-exclamation-triangle-fill"></i></div>
-                    <div class="status-banner__content">
-                        <strong>${textoAviso}</strong>
-                        <p>AVISO</p>
-                    </div>
-                </div>`;
-            } else {
-                html = `
-                <div class="status-banner status-banner--success">
-                    <div class="status-banner__icon status-banner__icon--success"><i class="bi bi-check-circle-fill"></i></div>
-                    <div class="status-banner__content">
-                        <strong>${textoPadraoTitulo}</strong>
-                        <p>${textoPadraoSub}</p>
-                    </div>
-                </div>`;
+            // 2. Se NÃO retornou aviso, usa a regra padrão
+            else {
+                // 2a. Se for Segunda-feira
+                if (isMonday) {
+                    html = `
+                    <div class="status-banner status-banner--danger">
+                        <div class="status-banner__icon status-banner__icon--danger"><i class="bi bi-calendar-x-fill"></i></div>
+                        <div class="status-banner__content">
+                            <strong class="fechado-title">${textoFechadoTitulo}</strong>
+                            <p>${textoFechadoDesc}</p>
+                        </div>
+                    </div>`;
+                }
+                // 2b. Se for outro dia (Aberto default)
+                else {
+                    html = `
+                    <div class="status-banner status-banner--success">
+                        <div class="status-banner__icon status-banner__icon--success"><i class="bi bi-check-circle-fill"></i></div>
+                        <div class="status-banner__content">
+                            <strong>${textoPadraoTitulo}</strong>
+                            <p>${textoPadraoSub}</p>
+                        </div>
+                    </div>`;
+                }
             }
             avisoContainer.innerHTML = html;
         }
@@ -770,8 +842,12 @@
                 const date = new Date(currentBaseDateStr + 'T12:00:00');
                 date.setDate(date.getDate() - 7);
                 const newDateStr = date.toISOString().split('T')[0];
+
+                const newDate = new Date(newDateStr + 'T12:00:00');
+                const isMonday = newDate.getDay() === 1;
+
                 loadCalendar(newDateStr);
-                loadNotices(newDateStr);
+                loadNotices(newDateStr, isMonday);
             });
 
             container.querySelector('#next-days').addEventListener('click', () => {
@@ -779,21 +855,28 @@
                 const date = new Date(currentBaseDateStr + 'T12:00:00');
                 date.setDate(date.getDate() + 7);
                 const newDateStr = date.toISOString().split('T')[0];
+
+                const newDate = new Date(newDateStr + 'T12:00:00');
+                const isMonday = newDate.getDay() === 1;
+
                 loadCalendar(newDateStr);
-                loadNotices(newDateStr);
+                loadNotices(newDateStr, isMonday);
             });
 
             container.querySelectorAll('.pill-date').forEach(pill => {
                 pill.addEventListener('click', function() {
                     const clickedDateStr = this.getAttribute('data-date');
                     const currentBaseDateStr = container.getAttribute('data-base-date');
+                    const isMonday = this.classList.contains('is-closed');
+
                     if (clickedDateStr !== currentBaseDateStr) {
                         loadCalendar(clickedDateStr);
                     }
-                    if (this.classList.contains('is-closed')) {
-                        updateAvisoBanner([], true);
+
+                    if (isMonday) {
+                         loadNotices(clickedDateStr, true);
                     } else {
-                        loadNotices(clickedDateStr);
+                        loadNotices(clickedDateStr, false);
                     }
                 });
             });
@@ -810,24 +893,19 @@
                 ],
                 onChange: function(selectedDates, dateStr, instance) {
                     loadCalendar(dateStr);
-                    if (selectedDates[0].getDay() === 1) {
-                        updateAvisoBanner([], true);
-                    } else {
-                        loadNotices(dateStr);
-                    }
+                    const isMonday = selectedDates[0].getDay() === 1;
+                    loadNotices(dateStr, isMonday);
                 }
             });
 
             const todayButton = container.querySelector('#today-button');
             const hojeDateStr = container.getAttribute('data-hoje-date');
+
             todayButton.addEventListener('click', () => {
                 loadCalendar(hojeDateStr);
                 const hoje = new Date(hojeDateStr + 'T12:00:00');
-                if (hoje.getDay() === 1) {
-                    updateAvisoBanner([], true);
-                } else {
-                    loadNotices(hojeDateStr);
-                }
+                const isMonday = hoje.getDay() === 1;
+                loadNotices(hojeDateStr, isMonday);
             });
         }
 

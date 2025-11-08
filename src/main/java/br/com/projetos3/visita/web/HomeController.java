@@ -26,13 +26,12 @@ public class HomeController {
 
     private final AvisoService avisoService;
     private final FeedbackService feedbackService;
-    private final RegraService regraService; // <-- 1. ADICIONADO
+    private final RegraService regraService;
 
-    // 2. CONSTRUTOR ATUALIZADO
     public HomeController(AvisoService a, FeedbackService f, RegraService r){
         this.avisoService = a;
         this.feedbackService = f;
-        this.regraService = r; // <-- 3. ADICIONADO
+        this.regraService = r;
     }
 
     /**
@@ -53,6 +52,7 @@ public class HomeController {
         LocalDate endDate = baseDate.plusDays(3);
 
         // 2. Buscar UMA VEZ as datas que têm avisos nesse intervalo
+        // (Isto aqui vai funcionar assim que o AvisoService for corrigido)
         Set<LocalDate> avisoDates = avisoService.findDatesWithAvisos(startDate, endDate);
 
         // 3. Criar a lista de DTOs
@@ -79,6 +79,7 @@ public class HomeController {
         nomeMes = nomeMes.substring(0, 1).toUpperCase() + nomeMes.substring(1);
 
         // 5. Adicionar ao Model
+        // (Isto aqui também vai funcionar assim que o AvisoService for corrigido)
         model.addAttribute("avisos", avisoService.porData(baseDate)); // Avisos do dia central
         model.addAttribute("hoje", hoje);
         model.addAttribute("baseDate", baseDate);
@@ -138,6 +139,8 @@ public class HomeController {
     @ResponseBody
     public List<Aviso> getAvisosPorData(
             @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        // (Esta é a API que o JavaScript usa. Ela vai funcionar
+        // assim que o AvisoService for corrigido)
         return avisoService.porData(data);
     }
 
