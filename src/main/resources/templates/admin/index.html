@@ -184,14 +184,14 @@
         <div class="px-3 pt-3">
             <div class="menu-section">Principal</div>
             <nav class="nav flex-column">
-                <div class="nav-item"><a class="nav-link" th:href="@{/admin/avisos}"><i class="bi bi-bell"></i> Avisos</a></div>
-                <div class="nav-item"><a class="nav-link" th:href="@{/admin/horarios}"><i class="bi bi-clock"></i> Horários</a></div>
-                <div class="nav-item"><a class="nav-link" th:href="@{/admin/regras}"><i class="bi bi-journal-check"></i> Regras</a></div>
+                <div class="nav-item"><a class="nav-link" th:href="@{/admin/avisos}" th:classappend="${#httpServletRequest != null and #httpServletRequest.requestURI != null and #httpServletRequest.requestURI.startsWith('/admin/avisos')} ? ' active' : ''"><i class="bi bi-bell"></i> Avisos</a></div>
+                <div class="nav-item"><a class="nav-link" th:href="@{/admin/horarios}" th:classappend="${#httpServletRequest != null and #httpServletRequest.requestURI != null and #httpServletRequest.requestURI.startsWith('/admin/horarios')} ? ' active' : ''"><i class="bi bi-clock"></i> Horários</a></div>
+                <div class="nav-item"><a class="nav-link" th:href="@{/admin/regras}" th:classappend="${#httpServletRequest != null and #httpServletRequest.requestURI != null and #httpServletRequest.requestURI.startsWith('/admin/regras')} ? ' active' : ''"><i class="bi bi-journal-check"></i> Regras</a></div>
             </nav>
             <div class="menu-section">Gestão</div>
             <nav class="nav flex-column mb-4">
-                <div class="nav-item"><a class="nav-link" th:href="@{/admin/feedbacks}"><i class="bi bi-chat-square-heart"></i> Feedbacks</a></div>
-                <div class="nav-item"><a class="nav-link" th:href="@{/admin/relatorios}"><i class="bi bi-graph-up"></i> Relatórios</a></div>
+                <div class="nav-item"><a class="nav-link" th:href="@{/admin/feedbacks}" th:classappend="${#httpServletRequest != null and #httpServletRequest.requestURI != null and #httpServletRequest.requestURI.startsWith('/admin/feedbacks')} ? ' active' : ''"><i class="bi bi-chat-square-heart"></i> Feedbacks</a></div>
+                <div class="nav-item"><a class="nav-link" th:href="@{/admin/relatorios}" th:classappend="${#httpServletRequest != null and #httpServletRequest.requestURI != null and #httpServletRequest.requestURI.startsWith('/admin/relatorios')} ? ' active' : ''"><i class="bi bi-graph-up"></i> Relatórios</a></div>
             </nav>
         </div>
         <div class="sidebar-footer">

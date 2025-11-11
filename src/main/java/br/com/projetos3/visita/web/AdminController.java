@@ -39,6 +39,12 @@ public class AdminController {
         return "admin/regras";
     }
 
+    // Página de relatórios
+    @GetMapping("/relatorios")
+    public String relatorios() {
+        return "admin/relatorios"; // renderiza src/main/resources/templates/admin/relatorios.html
+    }
+
     // 4. Adicione o método POST para /admin/regras
     @PostMapping("/regras")
     public String salvarRegras(@Valid @ModelAttribute("regra") Regra regra,

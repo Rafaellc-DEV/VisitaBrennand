@@ -1,0 +1,57 @@
+/* Scoped styles for reports to avoid overriding admin layout */
+.report-shell .report-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.report-shell .report-stat-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+}
+
+.report-shell .report-stat-card h3 { font-size: 16px; color: #666; margin-bottom: 8px; }
+.report-shell .report-stat-value { font-size: 28px; font-weight:700; color: #294A5D; }
+.report-shell .report-stat-label { font-size: 13px; color:#718096 }
+
+.report-shell .report-charts-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px;
+}
+
+.report-shell .report-chart-card { background:#fff; padding:18px; border-radius:10px; box-shadow:0 6px 18px -12px rgba(0,0,0,0.12);} 
+.report-shell .report-chart-card h3 { margin:0 0 12px 0; color:#475569 }
+
+.report-shell .report-full { grid-column: 1 / -1 }
+.report-shell canvas { width:100% !important; height:320px !important }
+
+/* small responsive tweak */
+@media (max-width: 900px){ .report-shell .report-charts-grid{ grid-template-columns:1fr } .report-shell .report-stats-grid{ grid-template-columns:1fr } }
+
+/* --- Additional styles to approximate original Relatórios design --- */
+.report-shell{ padding: 28px 26px 80px; background-color: #f1f6f9; }
+.report-shell .report-header{ margin-bottom: 20px; }
+.report-shell .report-header h1{ font-weight:700; color:#294A5D; font-size:1.4rem; text-align:center }
+
+.report-shell .filters-card{ background:#fff; border-radius:12px; box-shadow:0 6px 18px -12px rgba(0,0,0,0.12); padding:16px 0; margin-bottom:22px }
+.report-shell .filters-inner{ display:flex; align-items:center; gap:18px }
+.report-shell .filters-title h5{ margin:0; color:#102027 }
+.report-shell .filters-controls .form-floating{ min-width:200px }
+.report-shell .btn-apply{ height:44px }
+
+.report-shell .report-stat-card{ padding:28px; border-radius:12px; box-shadow:0 10px 30px -18px rgba(0,0,0,0.12); background:#fff }
+.report-shell .report-stat-card h3{ font-size:14px; color:#718096; margin-bottom:8px }
+.report-shell .report-stat-value{ font-size:30px; font-weight:800; color:#294A5D }
+.report-shell .report-stat-sub{ color:#999; margin-top:6px }
+
+.report-shell .report-charts-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:20px }
+.report-shell .report-full{ grid-column: 1 / -1 }
+.report-shell canvas{ width:100% !important; height:320px !important }
+
+@media (max-width: 1000px){
+  .report-shell .filters-inner{ flex-direction:column; align-items:stretch }
+  .report-shell .filters-controls .form-floating{ width:100% }
+}
