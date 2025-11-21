@@ -19,34 +19,46 @@ public class ComoChegarService {
         return repo.findById(ID_FIXO).orElseGet(() -> {
             ComoChegar novo = new ComoChegar();
 
-            // Conteúdo padrão HTML com informações úteis
+            // AQUI: O HTML NOVO (CARDS) VAI DENTRO DO JAVA
             String conteudoPadrao = """
-                <p>O Parque de Esculturas Francisco Brennand está localizado no recife de proteção do porto, em frente ao Marco Zero. Veja as opções de acesso:</p>
-                
-                <h3>🛥️ Travessia de Barco (Marco Zero)</h3>
-                <p>Pequenas embarcações realizam a travessia saindo do Marco Zero (Recife Antigo).</p>
-                <ul>
-                    <li><strong>Valor médio:</strong> R$ 10,00 (ida e volta) por pessoa.</li>
-                    <li><strong>Bicicletas:</strong> Alguns barqueiros cobram taxa extra (aprox. R$ 5,00) para levar bicicletas.</li>
-                    <li><strong>Tempo:</strong> A travessia leva cerca de 5 minutos.</li>
-                </ul>
+                <div class="transport-grid">
+                    <div class="transport-card">
+                        <div class="transport-icon-box"><i class="bi bi-boat"></i></div>
+                        <h6 class="transport-title">Travessia de Barco</h6>
+                        <p class="transport-desc">Saída do Marco Zero (Recife Antigo).</p>
+                        <ul class="transport-details">
+                            <li><i class="bi bi-cash-coin"></i> <span>R$ 10,00 (ida e volta)</span></li>
+                            <li><i class="bi bi-clock"></i> <span>~5 minutos</span></li>
+                            <li><i class="bi bi-bicycle"></i> <span>Aceita bicicleta (+R$ 5)</span></li>
+                        </ul>
+                    </div>
 
-                <h3>🚗 De Carro ou Uber</h3>
-                <p>O acesso terrestre é feito pelo bairro de Brasília Teimosa.</p>
-                <ol>
-                    <li>Siga pela Av. Brasília Formosa até o final.</li>
-                    <li>Entre na rua que dá acesso ao Mole do Porto.</li>
-                    <li>Há estacionamento limitado próximo à entrada do parque.</li>
-                </ol>
+                    <div class="transport-card">
+                        <div class="transport-icon-box"><i class="bi bi-car-front"></i></div>
+                        <h6 class="transport-title">Carro ou Uber</h6>
+                        <p class="transport-desc">Acesso por Brasília Teimosa.</p>
+                        <div class="transport-steps">
+                            <div class="step"><span class="num">1</span> Av. Brasília Formosa até o fim</div>
+                            <div class="step"><span class="num">2</span> Entre na rua do Mole do Porto</div>
+                            <div class="step"><span class="num">3</span> Estacionamento no local</div>
+                        </div>
+                    </div>
 
-                <h3>🛳️ Catamarã Tours</h3>
-                <p>A empresa Catamarã Tours oferece passeios que contemplam o parque. Consulte o site oficial para horários e valores atualizados.</p>
+                    <div class="transport-card">
+                        <div class="transport-icon-box"><i class="bi bi-ticket-perforated"></i></div>
+                        <h6 class="transport-title">Catamarã Tours</h6>
+                        <p class="transport-desc">Passeio turístico completo pelo rio.</p>
+                        <div style="margin-top: auto;">
+                            <a href="https://www.catamarantours.com.br" target="_blank" class="btn btn-outline-brand w-100 btn-sm">
+                                Ver Site Oficial <i class="bi bi-box-arrow-up-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             """;
 
             novo.setConteudo(conteudoPadrao);
             novo.setAtualizadoEm(LocalDateTime.now());
-
-            // Salva no banco para persistir esse padrão
             return repo.save(novo);
         });
     }

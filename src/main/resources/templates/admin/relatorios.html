@@ -1,61 +1,107 @@
 <!DOCTYPE html>
-<html th:replace="~{admin/base :: layout('Relatórios', ~{::section})}" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout('Relatórios', ~{::section})}">
 <section>
     <link rel="stylesheet" th:href="@{/relatorio-feedbacks/styles.css}" href="/relatorio-feedbacks/styles.css">
-    <style>
-        .report-shell { width:100%; padding: 20px; }
-        .report-header { text-align:center; margin-bottom:24px; }
-        .report-header h1{ font-size:1.8rem; color:#294A5D; font-weight: 800; }
 
-        /* Ajuste nos cards */
-        .report-stat-card { transition: transform 0.2s; }
-        .report-stat-card:hover { transform: translateY(-3px); }
+    <style>
+        /* CORREÇÃO AQUI: Adicionei max-width e margin auto para centralizar */
+        .report-shell {
+            width: 100%;
+            max-width: 1100px; /* Trava a largura para não esticar infinitamente */
+            margin: 0 auto;    /* Centraliza na tela */
+            padding: 0;
+            background: transparent;
+        }
+
+        .report-chart-card, .report-stat-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            border: 1px solid #eef2f6;
+            padding: 20px;
+        }
+
+        .report-chart-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--brand);
+            margin-bottom: 1rem;
+        }
+
+        /* Containers para controlar o tamanho do Canvas */
+        .chart-box {
+            position: relative;
+            height: 300px; /* Aumentei um pouco a altura para dar respiro */
+            width: 100%;
+        }
+
+        .chart-box-sm {
+            position: relative;
+            height: 200px; /* Aumentei um pouco a altura */
+            width: 100%;
+        }
     </style>
 
-    <div class="report-shell container-fluid">
-        <div class="report-header">
-            <h1>Relatório de Feedbacks</h1>
-            <p class="text-muted">Indicadores em tempo real baseados nos dados dos visitantes</p>
+    <div id="conteudo-principal" class="container-fluid">
+
+        <div class="report-shell mb-4 d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold m-0" style="color: var(--brand);">Relatórios</h2>
+                <p class="text-muted small m-0">Acompanhamento de métricas e indicadores</p>
+            </div>
+            <div>
+                <a th:href="@{/admin/avisos}" class="btn btn-sm btn-primary">
+                    <i class="bi bi-plus-lg"></i> Novo Aviso
+                </a>
+            </div>
         </div>
 
-        <div class="report-stats-grid">
-            <div class="report-stat-card">
-                <h3>Média Geral</h3>
-                <div class="report-stat-value" th:text="${media}">0.0</div>
-                <div class="report-stat-sub">
-                    <span th:if="${media != '0.0'}" style="color:#f6c343; letter-spacing:2px;">
-                        ★★★★★
-                    </span>
-                    <span th:if="${media == '0.0'}" class="text-muted small">Sem dados</span>
+        <div class="report-shell">
+
+            <div class="report-stats-grid mb-4">
+                <div class="report-stat-card">
+                    <h3 class="text-muted text-uppercase" style="font-size: 0.75rem;">Média Geral</h3>
+                    <div class="d-flex align-items-baseline gap-2">
+                        <div class="report-stat-value display-6 fw-bold" th:text="${media}" style="color: var(--brand);">0.0</div>
+                        <div class="report-stat-sub">
+                            <span th:if="${media != '0.0'}" style="color:#f59e0b;">★★★★★</span>
+                            <span th:if="${media == '0.0'}" class="text-muted small">Sem dados</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="report-stat-card">
+                    <h3 class="text-muted text-uppercase" style="font-size: 0.75rem;">Total de Feedbacks</h3>
+                    <div class="report-stat-value display-6 fw-bold" th:text="${total}" style="color: var(--brand);">0</div>
+                    <div class="small text-muted">registros totais</div>
+                </div>
+                <div class="report-stat-card">
+                    <h3 class="text-muted text-uppercase" style="font-size: 0.75rem;">Satisfação</h3>
+                    <div class="report-stat-value display-6 fw-bold" th:text="${satisfacao} + '%'" style="color: #10b981;">0%</div>
+                    <div class="small text-muted">avaliações positivas</div>
                 </div>
             </div>
-            <div class="report-stat-card">
-                <h3>Total de Feedbacks</h3>
-                <div class="report-stat-value" th:text="${total}">0</div>
-                <div class="report-stat-label">registros totais</div>
-            </div>
-            <div class="report-stat-card">
-                <h3>Satisfação</h3>
-                <div class="report-stat-value" th:text="${satisfacao} + '%'">0%</div>
-                <div class="report-stat-label">avaliações positivas (4 ou 5)</div>
-            </div>
-        </div>
 
-        <div class="report-charts-grid">
-            <div class="report-chart-card">
-                <h3>Avaliações por Estrelas</h3>
-                <canvas id="starsChart"></canvas>
+            <div class="report-charts-grid">
+                <div class="report-chart-card">
+                    <h3>Avaliações por Estrelas</h3>
+                    <div class="chart-box">
+                        <canvas id="starsChart"></canvas>
+                    </div>
+                </div>
+                <div class="report-chart-card">
+                    <h3>Evolução da Média (6 Meses)</h3>
+                    <div class="chart-box">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
             </div>
-            <div class="report-chart-card">
-                <h3>Evolução da Média (6 Meses)</h3>
-                <canvas id="timelineChart"></canvas>
-            </div>
-        </div>
 
-        <div class="report-chart-card report-full">
-            <h3>Feedbacks por Tipo</h3>
-            <div style="height: 250px;">
-                <canvas id="typesChart"></canvas>
+            <div class="report-chart-card report-full mt-4">
+                <h3>Feedbacks por Tipo</h3>
+                <div class="chart-box-sm">
+                    <canvas id="typesChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -64,18 +110,19 @@
 
     <script th:inline="javascript">
         /*<![CDATA[*/
-
         // Recuperando dados do Model Java
         const estrelasData = /*[[${estrelasData}]]*/ [0,0,0,0,0];
         const timelineLabels = /*[[${timelineLabels}]]*/ ['Jan','Fev'];
         const timelineData = /*[[${timelineData}]]*/ [0,0];
         const tiposData = /*[[${tiposData}]]*/ [0,0];
 
-        // Configuração de Cores
         const brandColor = '#294A5D';
-        const accentColor = '#A7532C';
+        const gridColor = '#f3f4f6';
 
-        // 1. Gráfico de Estrelas (Barra)
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = '#64748b';
+
+        // 1. Gráfico de Estrelas
         new Chart(document.getElementById('starsChart'), {
             type: 'bar',
             data: {
@@ -83,20 +130,23 @@
                 datasets: [{
                     label: 'Quantidade',
                     data: estrelasData,
-                    backgroundColor: [
-                        '#ef4444', // 1 star (red)
-                        '#f97316', // 2 stars (orange)
-                        '#eab308', // 3 stars (yellow)
-                        '#84cc16', // 4 stars (light green)
-                        '#22c55e'  // 5 stars (green)
-                    ],
-                    borderRadius: 4
+                    backgroundColor: ['#ef4444', '#f97316', '#eab308', '#84cc16', '#22c55e'],
+                    borderRadius: 6,
+                    maxBarThickness: 50
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 },
+                        grid: { color: gridColor, borderDash: [5, 5] }
+                    },
+                    x: { grid: { display: false } }
+                }
             }
         });
 
@@ -109,20 +159,30 @@
                     label: 'Nota Média',
                     data: timelineData,
                     borderColor: brandColor,
-                    backgroundColor: 'rgba(41, 74, 93, 0.1)',
+                    backgroundColor: 'rgba(41, 74, 93, 0.05)',
                     fill: true,
-                    tension: 0.3,
+                    tension: 0.4,
                     pointRadius: 4,
-                    pointBackgroundColor: brandColor
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: brandColor,
+                    borderWidth: 2
                 }]
             },
             options: {
                 responsive: true,
-                scales: { y: { min: 0, max: 5 } }
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        min: 0, max: 5,
+                        grid: { color: gridColor, borderDash: [5, 5] }
+                    },
+                    x: { grid: { display: false } }
+                }
             }
         });
 
-        // 3. Gráfico de Tipos (Horizontal Bar)
+        // 3. Gráfico de Tipos
         new Chart(document.getElementById('typesChart'), {
             type: 'bar',
             data: {
@@ -130,20 +190,26 @@
                 datasets: [{
                     label: 'Total',
                     data: tiposData,
-                    backgroundColor: ['#0ea5e9', '#ef4444'],
-                    barThickness: 40,
-                    borderRadius: 4
+                    backgroundColor: ['#3b82f6', '#ef4444'],
+                    barThickness: 35,
+                    borderRadius: 6
                 }]
             },
             options: {
-                indexAxis: 'y', // Barra horizontal
+                indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
-                scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 },
+                        grid: { color: gridColor, borderDash: [5, 5] }
+                    },
+                    y: { grid: { display: false } }
+                }
             }
         });
-
         /*]]>*/
     </script>
 </section>

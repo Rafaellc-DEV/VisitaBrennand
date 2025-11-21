@@ -2,11 +2,11 @@ package br.com.projetos3.visita.web;
 
 import br.com.projetos3.visita.entity.ComoChegar;
 import br.com.projetos3.visita.entity.Feedback;
-import br.com.projetos3.visita.entity.Horario; // Importar
+import br.com.projetos3.visita.entity.Horario;
 import br.com.projetos3.visita.entity.Regra;
 import br.com.projetos3.visita.repository.FeedbackRepository;
 import br.com.projetos3.visita.service.ComoChegarService;
-import br.com.projetos3.visita.service.HorarioService; // Importar
+import br.com.projetos3.visita.service.HorarioService;
 import br.com.projetos3.visita.service.RegraService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -29,10 +29,9 @@ public class AdminController {
 
     private final RegraService regraService;
     private final ComoChegarService comoChegarService;
-    private final HorarioService horarioService; // Nova injeção
+    private final HorarioService horarioService;
     private final FeedbackRepository feedbackRepository;
 
-    // Construtor atualizado
     public AdminController(RegraService regraService,
                            ComoChegarService comoChegarService,
                            HorarioService horarioService,
@@ -49,11 +48,13 @@ public class AdminController {
     }
 
     @GetMapping
-    public String adminHome() {
+    public String adminHome(Model model) {
+        // Agora carregamos os dados do gráfico também na Home
+        carregarDadosDeRelatorio(model);
         return "admin/index";
     }
 
-    // --- REGRAS ---
+    // --- MÉTODOS EXISTENTES (Regras, Como Chegar, Horários) ---
     @GetMapping("/regras")
     public String editarRegras(Model model) {
         if (!model.containsAttribute("regra")) {
@@ -76,7 +77,6 @@ public class AdminController {
         return "redirect:/admin/regras";
     }
 
-    // --- COMO CHEGAR ---
     @GetMapping("/como-chegar")
     public String editarComoChegar(Model model) {
         if (!model.containsAttribute("comoChegar")) {
@@ -99,7 +99,6 @@ public class AdminController {
         return "redirect:/admin/como-chegar";
     }
 
-    // --- HORÁRIOS (NOVO) ---
     @GetMapping("/horarios")
     public String editarHorarios(Model model) {
         if (!model.containsAttribute("horario")) {
@@ -114,7 +113,6 @@ public class AdminController {
                                  BindingResult br, RedirectAttributes ra, Model model) {
         if (br.hasErrors()) {
             model.addAttribute("pageTitle", "Editar Horários");
-            // Mensagem genérica ou específica do erro de regex
             model.addAttribute("error", "Erro ao salvar. Verifique se os horários estão no formato HH:mm.");
             return "admin/horarios";
         }
@@ -123,9 +121,14 @@ public class AdminController {
         return "redirect:/admin/horarios";
     }
 
-    // --- RELATÓRIOS ---
     @GetMapping("/relatorios")
     public String relatorios(Model model) {
+        carregarDadosDeRelatorio(model);
+        return "admin/relatorios";
+    }
+
+    // --- MÉTODO PRIVADO AUXILIAR PARA CALCULAR DADOS ---
+    private void carregarDadosDeRelatorio(Model model) {
         List<Feedback> todos = feedbackRepository.findAll();
         long total = todos.size();
         double mediaGeral = todos.stream().mapToInt(Feedback::getNota).average().orElse(0.0);
@@ -165,7 +168,5 @@ public class AdminController {
         model.addAttribute("timelineLabels", mesesLabels);
         model.addAttribute("timelineData", mediasMensais);
         model.addAttribute("tiposData", List.of(countSugestao, countReclamacao));
-
-        return "admin/relatorios";
     }
 }
