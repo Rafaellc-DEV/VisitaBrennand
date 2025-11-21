@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html th:replace="~{admin/base :: layout('Editar Horários', ~{::section})}" xmlns:th="http://www.thymeleaf.org">
+<section>
+    <style>
+        .content-area { display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 1rem; }
+        .form-card {
+            background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08); max-width: 600px; width: 100%; padding: 2.5rem 2rem;
+        }
+        .form-label { font-weight: 600; color: var(--muted); margin-bottom: 6px; display: block; }
+        .form-control { border-radius: 10px; border: 1px solid var(--line); padding: 12px; font-size: 15px; color: var(--ink); }
+        .form-control:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(41,74,93,0.15); }
+        .btn-confirm {
+            width: 100%; background: var(--ink); color: white; font-weight: 600; border: none;
+            border-radius: 10px; padding: 12px; margin-top: 1.5rem; transition: all 0.2s;
+        }
+        .btn-confirm:hover { background: #2d3748; }
+        .section-divider { margin: 1.5rem 0; border-bottom: 1px solid var(--line); }
+        .invalid-feedback { display: block; font-size: 0.85rem; margin-top: 4px; color: #dc3545; }
+    </style>
+
+    <div class="content-area">
+        <div th:if="${success}" class="alert alert-success w-100" style="max-width:600px" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-danger w-100" style="max-width:600px" th:text="${error}"></div>
+
+        <div class="form-card">
+            <h3 class="text-center mb-4" style="color: var(--brand); font-weight: 800;">Horários de Funcionamento</h3>
+
+            <form method="post" th:action="@{/admin/horarios}" th:object="${horario}">
+                <!-- Semana -->
+                <div class="mb-3">
+                    <label class="form-label">Título (Dias Úteis)</label>
+                    <input type="text" th:field="*{tituloSemana}" class="form-control" placeholder="Ex: Terça a Sexta-feira"
+                           th:classappend="${#fields.hasErrors('tituloSemana')} ? 'is-invalid' : ''">
+                    <div th:if="${#fields.hasErrors('tituloSemana')}" class="invalid-feedback" th:errors="*{tituloSemana}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Horário</label>
+                    <input type="text" th:field="*{horarioSemana}" class="form-control" placeholder="Ex: 09:00 às 16:00"
+                           th:classappend="${#fields.hasErrors('horarioSemana')} ? 'is-invalid' : ''">
+                    <small class="text-muted">Formato obrigatório: HH:mm (ex: 09:00)</small>
+                    <div th:if="${#fields.hasErrors('horarioSemana')}" class="invalid-feedback" th:errors="*{horarioSemana}"></div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- Fim de Semana -->
+                <div class="mb-3">
+                    <label class="form-label">Título (Fim de Semana)</label>
+                    <input type="text" th:field="*{tituloFimDeSemana}" class="form-control" placeholder="Ex: Sábado e Domingo"
+                           th:classappend="${#fields.hasErrors('tituloFimDeSemana')} ? 'is-invalid' : ''">
+                    <div th:if="${#fields.hasErrors('tituloFimDeSemana')}" class="invalid-feedback" th:errors="*{tituloFimDeSemana}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Horário</label>
+                    <input type="text" th:field="*{horarioFimDeSemana}" class="form-control" placeholder="Ex: 08:00 às 16:00"
+                           th:classappend="${#fields.hasErrors('horarioFimDeSemana')} ? 'is-invalid' : ''">
+                    <small class="text-muted">Formato obrigatório: HH:mm (ex: 08:00)</small>
+                    <div th:if="${#fields.hasErrors('horarioFimDeSemana')}" class="invalid-feedback" th:errors="*{horarioFimDeSemana}"></div>
+                </div>
+
+                <button type="submit" class="btn-confirm">Salvar Alterações</button>
+            </form>
+        </div>
+    </div>
+</section>
+</html>

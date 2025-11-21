@@ -122,36 +122,25 @@
             }
         }
 
-        /* ==================================================== */
-        /* MUDANÇA #1 (CSS DO BANNER)                           */
-        /* ==================================================== */
         .hero-banner-image {
             width: 100%;
             height: 25vw;
             min-height: 140px;
             max-height: 220px;
             background-image: url('/img/banner_panoramico.jpg');
-
-            /* MUDANÇA: de 'cover' para 'contain' (evita esticar/cortar) */
             background-size: contain;
-            background-repeat: no-repeat; /* Necessário para 'contain' */
-
+            background-repeat: no-repeat;
             background-position: center 50%;
             border-bottom: 1px solid var(--color-border);
-            /* margin-top: var(--header-height-mobile); -> REMOVIDO */
-            background-color: #E2E8F0; /* Cor de fundo para preencher espaço */
+            background-color: #E2E8F0;
         }
 
         @media (min-width: 769px) {
             .hero-banner-image {
                 height: 280px;
                 max-height: 280px;
-                /* margin-top: var(--header-height-desktop); -> REMOVIDO */
             }
         }
-        /* ==================================================== */
-        /* FIM DA MUDANÇA #1                                    */
-        /* ==================================================== */
 
         .wrap {
           max-width: 1100px;
@@ -419,12 +408,8 @@
         .social-icons svg { width: 20px; height: 20px; }
         .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.2); margin-top: 2rem; padding-top: 2rem; font-size: 0.875rem; color: #A0AEC0; }
 
-        /* ==================================================== */
-        /* MUDANÇA #2 (RESPONSIVO)                              */
-        /* ==================================================== */
         @media (max-width: 768px) {
           .wrap { padding: 1rem 0; }
-          /* .status-banner foi adicionado aqui */
           .card-ui, #aviso-container, .status-banner {
             margin-bottom: 1rem;
             border-radius: 0;
@@ -435,9 +420,6 @@
           .pill:nth-of-type(1), .pill:nth-of-type(7) { display: none; }
           .bottom-grid { grid-template-columns: 1fr; }
         }
-        /* ==================================================== */
-        /* FIM DA MUDANÇA #2                                    */
-        /* ==================================================== */
 
         .regras-content p:last-child,
         .regras-content ul:last-child,
@@ -474,7 +456,6 @@
 
 <section class="hero-banner-image" aria-label="Banner do Parque de Esculturas Francisco Brennand"></section>
 
-
 <div class="wrap">
     <main>
 
@@ -497,7 +478,6 @@
                             <i class="bi bi-calendar-event"></i>
                         </button>
                     </div>
-
                 </div>
 
                 <div class="calendar-pills">
@@ -521,11 +501,8 @@
             </div>
         </div>
 
-
         <div id="aviso-container">
-
             <th:block th:if="${!#lists.isEmpty(avisos)}">
-
                 <div th:if="${!avisos.get(0).ativo}" class="status-banner status-banner--danger">
                     <div class="status-banner__icon status-banner__icon--danger"><i class="bi bi-calendar-x-fill"></i></div>
                     <div class="status-banner__content">
@@ -544,7 +521,6 @@
             </th:block>
 
             <th:block th:if="${#lists.isEmpty(avisos)}">
-
                 <div th:if="${baseDate.dayOfWeek.value == 1}" class="status-banner status-banner--danger">
                     <div class="status-banner__icon status-banner__icon--danger"><i class="bi bi-calendar-x-fill"></i></div>
                     <div class="status-banner__content">
@@ -563,15 +539,16 @@
             </th:block>
         </div>
 
-
         <section class="card-ui">
             <h5 class="section-title" th:text="#{home.horarios}"></h5>
             <div class="row">
                 <div class="col-sm-6">
-                    <p class="mb-1"><strong>Terça a Sexta-feira</strong><br><span class="text-muted">(09:00 às 16:00)</span></p>
+                    <p class="mb-1"><strong th:text="${horario.tituloSemana}">Terça a Sexta-feira</strong><br>
+                        <span class="text-muted" th:text="'(' + ${horario.horarioSemana} + ')'">(09:00 às 16:00)</span></p>
                 </div>
                 <div class="col-sm-6">
-                    <p class="mb-0"><strong>Sábado e Domingo</strong><br><span class="text-muted">(08:00 às 16:00)</span></p>
+                    <p class="mb-0"><strong th:text="${horario.tituloFimDeSemana}">Sábado e Domingo</strong><br>
+                        <span class="text-muted" th:text="'(' + ${horario.horarioFimDeSemana} + ')'">(08:00 às 16:00)</span></p>
                 </div>
             </div>
         </section>
@@ -663,17 +640,24 @@
         <section class="card-ui">
             <h5 class="section-title" th:text="#{home.comochegar.titulo}">Como chegar</h5>
 
-            <strong style="color: var(--color-text-primary);" th:text="#{home.comochegar.catamara.titulo}">Catamarã:</strong>
-            <p class="mb-2 text-secondary" style="font-size: 0.95rem;">
-                <span th:text="#{home.comochegar.catamara.local}">Local: Cais Santa Rita, s/n – São José, Recife – PE, São José</span><br>
-                <a href="https://reservas.catamarantours.com.br/" target="_blank" rel="noopener noreferrer">https://reservas.catamarantours.com.br/</a>
-            </p>
+            <div class="como-chegar-content"
+                 th:if="${comoChegar != null and comoChegar.conteudo != null}"
+                 th:utext="${comoChegar.conteudo}">
+            </div>
 
-            <strong style="color: var(--color-text-primary);" th:text="#{home.comochegar.barqueiros.titulo}">Barqueiros do Marco Zero:</strong>
-            <p class="mb-1 text-secondary" style="font-size: 0.95rem;">
-                <span th:text="#{home.comochegar.barqueiros.preco1}">R$ 5,00 por trecho</span><br>
-                <span th:text="#{home.comochegar.barqueiros.preco2}">R$ 6,00 por trecho com bicicleta</span>
-            </p>
+            <div th:if="${comoChegar == null or comoChegar.conteudo == null}">
+                <strong style="color: var(--color-text-primary);" th:text="#{home.comochegar.catamara.titulo}">Catamarã:</strong>
+                <p class="mb-2 text-secondary" style="font-size: 0.95rem;">
+                    <span th:text="#{home.comochegar.catamara.local}">Local: Cais Santa Rita, s/n – São José, Recife – PE, São José</span><br>
+                    <a href="https://reservas.catamarantours.com.br/" target="_blank" rel="noopener noreferrer">https://reservas.catamarantours.com.br/</a>
+                </p>
+
+                <strong style="color: var(--color-text-primary);" th:text="#{home.comochegar.barqueiros.titulo}">Barqueiros do Marco Zero:</strong>
+                <p class="mb-1 text-secondary" style="font-size: 0.95rem;">
+                    <span th:text="#{home.comochegar.barqueiros.preco1}">R$ 5,00 por trecho</span><br>
+                    <span th:text="#{home.comochegar.barqueiros.preco2}">R$ 6,00 por trecho com bicicleta</span>
+                </p>
+            </div>
         </section>
 
         <div class="alert-container">
@@ -742,7 +726,6 @@
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function () {
 
-        // --- LÓGICA 1: CALENDÁRIO DINÂMICO ---
         const calendarContainer = document.getElementById('calendar-container');
         const avisoContainer = document.getElementById('aviso-container');
 
@@ -776,16 +759,12 @@
             }
         }
 
-        // --- FUNÇÃO ATUALIZADA (updateAvisoBanner) ---
         function updateAvisoBanner(avisos, isMonday) {
             let html;
             const textoAvisoPadrao = /*[[#{home.aviso}]]*/ 'AVISO';
 
-            // 1. Se a API retornou um aviso
             if (avisos && avisos.length > 0) {
                 const aviso = avisos[0];
-
-                // 1a. Se o aviso for 'inativo' (Fechado)
                 if (!aviso.ativo) {
                     html = `
                     <div class="status-banner status-banner--danger">
@@ -796,7 +775,6 @@
                         </div>
                     </div>`;
                 }
-                // 1b. Se o aviso for 'ativo' (Aberto com aviso)
                 else {
                     html = `
                     <div class="status-banner status-banner--warning">
@@ -808,9 +786,7 @@
                     </div>`;
                 }
             }
-            // 2. Se NÃO retornou aviso, usa a regra padrão
             else {
-                // 2a. Se for Segunda-feira
                 if (isMonday) {
                     html = `
                     <div class="status-banner status-banner--danger">
@@ -821,7 +797,6 @@
                         </div>
                     </div>`;
                 }
-                // 2b. Se for outro dia (Aberto default)
                 else {
                     html = `
                     <div class="status-banner status-banner--success">
@@ -909,12 +884,10 @@
             });
         }
 
-        // --- Inicialização ---
         const initialCalendar = document.getElementById('calendar-fragment');
         if (initialCalendar) {
             attachCalendarListeners(initialCalendar);
         }
-
     });
 </script>
 

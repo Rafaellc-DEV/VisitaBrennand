@@ -27,16 +27,18 @@ public class HomeController {
     private final AvisoService avisoService;
     private final FeedbackService feedbackService;
     private final RegraService regraService;
+    private final ComoChegarService comoChegarService;
+    private final HorarioService horarioService; // Nova injeção
 
-    public HomeController(AvisoService a, FeedbackService f, RegraService r){
+    public HomeController(AvisoService a, FeedbackService f, RegraService r,
+                          ComoChegarService c, HorarioService h){
         this.avisoService = a;
         this.feedbackService = f;
         this.regraService = r;
+        this.comoChegarService = c;
+        this.horarioService = h;
     }
 
-    /**
-     * MÉTODO ATUALIZADO: Agora usa o CalendarDayDTO
-     */
     private void loadCalendarData(Model model, String baseDateStr, Locale locale) {
         LocalDate baseDate;
         try {
@@ -46,44 +48,30 @@ public class HomeController {
         }
 
         LocalDate hoje = LocalDate.now();
-
-        // 1. Definir o intervalo de 7 dias
         LocalDate startDate = baseDate.minusDays(3);
         LocalDate endDate = baseDate.plusDays(3);
-
-        // 2. Buscar UMA VEZ as datas que têm avisos nesse intervalo
-        // (Isto aqui vai funcionar assim que o AvisoService for corrigido)
         Set<LocalDate> avisoDates = avisoService.findDatesWithAvisos(startDate, endDate);
 
-        // 3. Criar a lista de DTOs
         List<CalendarDayDTO> calendarDays = new ArrayList<>();
         for (int i = -3; i <= 3; i++) {
             LocalDate currentDay = baseDate.plusDays(i);
             CalendarDayDTO dto = new CalendarDayDTO();
             dto.setDate(currentDay);
             dto.setToday(currentDay.isEqual(hoje));
-            dto.setBaseDate(currentDay.isEqual(baseDate)); // Marca o dia central
-
-            // LÓGICA DE DIA FECHADO (Segunda-feira)
+            dto.setBaseDate(currentDay.isEqual(baseDate));
             dto.setClosed(currentDay.getDayOfWeek() == DayOfWeek.MONDAY);
-
-            // LÓGICA DE AVISO (Verifica se a data está no Set)
             dto.setHasAviso(avisoDates.contains(currentDay));
-
             calendarDays.add(dto);
         }
 
-        // 4. Formatar o nome do mês
         DateTimeFormatter formatadorMes = DateTimeFormatter.ofPattern("MMMM yyyy", locale);
         String nomeMes = baseDate.format(formatadorMes);
         nomeMes = nomeMes.substring(0, 1).toUpperCase() + nomeMes.substring(1);
 
-        // 5. Adicionar ao Model
-        // (Isto aqui também vai funcionar assim que o AvisoService for corrigido)
-        model.addAttribute("avisos", avisoService.porData(baseDate)); // Avisos do dia central
+        model.addAttribute("avisos", avisoService.porData(baseDate));
         model.addAttribute("hoje", hoje);
         model.addAttribute("baseDate", baseDate);
-        model.addAttribute("calendarDays", calendarDays); // Lista de DTOs
+        model.addAttribute("calendarDays", calendarDays);
         model.addAttribute("nomeMes", nomeMes);
     }
 
@@ -95,15 +83,18 @@ public class HomeController {
                         Locale locale) {
 
         loadCalendarData(model, baseDateStr, locale);
-
-        // 4. ADICIONA AS REGRAS DINÂMICAS AO MODEL
         model.addAttribute("regra", regraService.getRegra());
+        model.addAttribute("comoChegar", comoChegarService.getComoChegar());
+
+        // NOVO: Carrega os horários dinâmicos
+        model.addAttribute("horario", horarioService.getHorario());
 
         if (!model.containsAttribute("feedback")) {
             model.addAttribute("feedback", new Feedback());
         }
         model.addAttribute("ok", ok);
         model.addAttribute("erro", erro);
+
         return "home/index";
     }
 
@@ -114,7 +105,6 @@ public class HomeController {
         loadCalendarData(model, date, locale);
         return "home/index :: calendar-fragment";
     }
-
 
     @PostMapping("/feedback")
     public String enviarFeedback(@Valid @ModelAttribute("feedback") Feedback feedback,
@@ -139,8 +129,6 @@ public class HomeController {
     @ResponseBody
     public List<Aviso> getAvisosPorData(
             @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
-        // (Esta é a API que o JavaScript usa. Ela vai funcionar
-        // assim que o AvisoService for corrigido)
         return avisoService.porData(data);
     }
 

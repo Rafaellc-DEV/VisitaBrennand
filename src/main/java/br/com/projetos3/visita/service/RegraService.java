@@ -15,31 +15,34 @@ public class RegraService {
         this.repo = repo;
     }
 
-    /**
-     * Carrega a regra de ID 1. Se não existir, cria uma nova em memória.
-     */
     public Regra getRegra() {
+        // Tenta buscar no banco. Se não existir, cria um padrão com as regras clássicas.
         return repo.findById(REGRA_ID).orElseGet(() -> {
             Regra novaRegra = new Regra();
             novaRegra.setTitulo("Regras de Visitação");
-            novaRegra.setConteudo("<p>Edite as regras de visitação aqui...</p>");
+
+            // Define o conteúdo padrão em HTML (lista de regras)
+            String conteudoPadrao = """
+                <ul>
+                    <li>Crianças devem estar acompanhadas dos responsáveis.</li>
+                    <li>Jogue lixo nas lixeiras e mantenha o parque limpo.</li>
+                    <li>Proibido fumar nas áreas de circulação.</li>
+                    <li><strong>Proibido subir drone</strong> (exceto com autorização prévia).</li>
+                    <li>Não toque nas obras de arte.</li>
+                </ul>
+            """;
+
+            novaRegra.setConteudo(conteudoPadrao);
             novaRegra.setAtualizadoEm(LocalDateTime.now());
-            return novaRegra;
+
+            // Salva no banco para que, da próxima vez, carregue do banco
+            return repo.save(novaRegra);
         });
     }
 
-    /**
-     * Salva a regra.
-     * AVISO: Esta versão confia que o HTML foi sanitizado
-     * no frontend (via DOMPurify) antes de ser enviado.
-     */
     public Regra salvar(Regra regra) {
-
-        // 1. Definir os dados de controle
-        regra.setId(REGRA_ID); // Força o ID = 1
+        regra.setId(REGRA_ID); // Garante que sempre atualiza o registro ID=1
         regra.setAtualizadoEm(LocalDateTime.now());
-
-        // 2. Salvar o HTML (que veio pré-sanitizado do frontend)
         return repo.save(regra);
     }
 }
