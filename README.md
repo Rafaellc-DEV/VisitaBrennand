@@ -35,9 +35,12 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
     <img src="https://img.shields.io/badge/Figma-FF7262?style=for-the-badge&logo=Figma&logoColor=white" alt="Figma"/></a>
     <a href="https://www.youtube.com/watch?v=JZMmBQAp4dw">
     <img src="https://img.shields.io/badge/Screencast LowFi-b50404?style=for-the-badge&logo=youtube&logoColor=white"/>
-    <a href="https://www.youtube.com/watch?v=JZMmBQAp4dw">
+    <a href="https://www.youtube.com/shorts/nozgQd4LdiM">
     <img src="https://img.shields.io/badge/Screencast SR1-b50404?style=for-the-badge&logo=youtube&logoColor=white"/>
-
+    <a href="https://www.colocaraqui">
+    <img src="https://img.shields.io/badge/Screencast SR2-b50404?style=for-the-badge&logo=youtube&logoColor=white"/>
+    <a href="https://youtu.be/wfDGipw1Y3k">
+    <img src="https://img.shields.io/badge/Screencast Testes Automatizados-b50404?style=for-the-badge&logo=youtube&logoColor=white"/>
       
 </a>
 
@@ -95,7 +98,61 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
 | Pedro Pessoa Bastos | Desenvolvedor Front End | [ppb2@cesar.school](mailto:ppb2@cesar.school) |
 | Rafael Lyra Costa | Desenvolvedor Full Stack | [rlc3@cesar.school](mailto:rlc3@cesar.school) |
 
+---
 
+## ▶️ Como Executar o Projeto
+
+### Pré-requisitos
+* **Java JDK 21** instalado.
+* Git instalado.
+
+### Passo a Passo
+
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/RafaelLc-DEV/VisitaBrennand.git](https://github.com/RafaelLc-DEV/VisitaBrennand.git)
+    cd VisitaBrennand
+    ```
+
+2.  **Execute a aplicação via terminal:**
+    O projeto utiliza o Maven Wrapper, então não é necessário ter o Maven instalado globalmente.
+
+    * **Windows:**
+        ```cmd
+        mvnw spring-boot:run
+        ```
+    * **Linux / macOS:**
+        ```bash
+        ./mvnw spring-boot:run
+        ```
+
+3.  **Acesse no navegador:**
+    * **Página Inicial (Pública):** [http://localhost:8080](http://localhost:8080)
+    * **Painel Administrativo:** [http://localhost:8080/admin](http://localhost:8080/admin)
+
+---
+
+## 🔐 Credenciais de Acesso
+
+O sistema possui uma área administrativa protegida. Para acessar as funcionalidades de gestão (Avisos, Regras, Feedbacks), utilize as credenciais padrão configuradas:
+
+* **Usuário:** `admin`
+* **Senha:** `password`
+
+> **Nota:** Estas credenciais estão configuradas no arquivo `SecurityConfig.java` para fins de desenvolvimento.
+
+---
+
+## 🗄️ Banco de Dados (H2)
+
+O projeto utiliza o banco de dados **H2 em memória** para desenvolvimento. Isso significa que os dados (feedbacks, avisos) são resetados toda vez que a aplicação é reiniciada.
+
+Para acessar o console do banco de dados:
+1.  Acesse: [http://localhost:8080/h2-console](http://localhost:8080/h2-console)
+2.  Preencha com os dados abaixo:
+    * **JDBC URL:** `jdbc:h2:mem:visita`
+    * **User Name:** `sa`
+    * **Password:** `sa`
 
 ---
 
