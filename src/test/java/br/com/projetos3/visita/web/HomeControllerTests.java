@@ -1,16 +1,16 @@
 package br.com.projetos3.visita.web;
 
 import br.com.projetos3.visita.entity.Aviso;
+import br.com.projetos3.visita.entity.ComoChegar;
 import br.com.projetos3.visita.entity.Feedback;
-import br.com.projetos3.visita.service.AvisoService;
-import br.com.projetos3.visita.service.FeedbackService;
-import br.com.projetos3.visita.service.RegraService;
+import br.com.projetos3.visita.entity.Horario;
+import br.com.projetos3.visita.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType; // Importar
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 // Importações estáticas essenciais
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,19 +35,28 @@ public class HomeControllerTests {
     @Autowired
     private MockMvc mvc;
 
-    // O HomeController precisa dos 3 serviços no construtor
-    // Precisamos simular (Mock) todos eles.
+    // Mock dos serviços utilizados pelo HomeController
     @MockBean
     private FeedbackService feedbackService;
-    @MockBean
-    private AvisoService avisoService; // ADICIONADO
-    @MockBean
-    private RegraService regraService; // ADICIONADO
 
+    @MockBean
+    private AvisoService avisoService;
+
+    @MockBean
+    private RegraService regraService;
+
+    @MockBean
+    private ComoChegarService comoChegarService;
+
+    @MockBean
+    private HorarioService horarioService; // Necessário pois a Home carrega os horários no rodapé/corpo
 
     @Test
     void testarEnvioFeedbackValido() throws Exception {
-        // (Este teste você já tinha)
+        // Mock necessário para evitar NullPointerException ao carregar a página após o redirect (se houver lógica no controller)
+        when(horarioService.getHorario()).thenReturn(new Horario());
+        when(comoChegarService.getComoChegar()).thenReturn(new ComoChegar());
+
         mvc.perform(post("/feedback")
                         .param("nome", "Visitante Teste")
                         .param("tipo", "Sugestão")
@@ -63,12 +73,11 @@ public class HomeControllerTests {
 
     @Test
     void testarEnvioFeedbackInvalido_SemComentario() throws Exception {
-        // (Este teste você já tinha)
         mvc.perform(post("/feedback")
                         .param("nome", "Visitante Teste")
                         .param("tipo", "Reclamação")
                         .param("nota", "2")
-                        .param("comentario", "")
+                        .param("comentario", "") // Inválido: Vazio
                         .with(csrf())
                 )
                 .andExpect(status().is3xxRedirection())
@@ -79,13 +88,10 @@ public class HomeControllerTests {
         verify(feedbackService, never()).salvar(any(Feedback.class));
     }
 
-    // --- NOVOS TESTES DA API DE AVISOS ---
+    // --- TESTES DA API DE AVISOS ---
 
     @Test
     void testarApiAvisoEncontrado() throws Exception {
-        // 1. Cenário:
-        // Queremos testar a data "2025-12-25".
-        // O serviço deve retornar um aviso para esta data.
         LocalDate dataEspecifica = LocalDate.of(2025, 12, 25);
 
         Aviso avisoMock = new Aviso();
@@ -95,37 +101,64 @@ public class HomeControllerTests {
 
         List<Aviso> listaDeAvisos = List.of(avisoMock);
 
-        // 2. Configura o Mock (O que o serviço deve retornar)
-        // QUANDO o avisoService.porData() for chamado com esta data...
-        when(avisoService.porData(dataEspecifica)).thenReturn(listaDeAvisos); // ...ENTÃO retorne a lista com o aviso.
+        when(avisoService.porData(dataEspecifica)).thenReturn(listaDeAvisos);
 
-        // 3. Executa e Verifica
-        mvc.perform(get("/api/avisos") // Rota da API
-                        .param("data", "2025-12-25") // Passa a data como parâmetro
+        mvc.perform(get("/api/avisos")
+                        .param("data", "2025-12-25")
                 )
-                .andExpect(status().isOk()) // Espera HTTP 200 (Sucesso)
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) // Espera um JSON
-                .andExpect(jsonPath("$", hasSize(1))) // Espera que a lista JSON tenha 1 item
-                .andExpect(jsonPath("$[0].texto", is("Fechado para o Natal"))) // Verifica o texto
-                .andExpect(jsonPath("$[0].ativo", is(false))); // Verifica se está "Fechado"
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].texto", is("Fechado para o Natal")))
+                .andExpect(jsonPath("$[0].ativo", is(false)));
     }
 
     @Test
     void testarApiAvisoNaoEncontrado() throws Exception {
-        // 1. Cenário:
-        // Queremos testar uma data que não tem avisos.
         LocalDate dataSemAviso = LocalDate.of(2025, 11, 11);
 
-        // 2. Configura o Mock
-        // QUANDO o avisoService.porData() for chamado...
-        when(avisoService.porData(dataSemAviso)).thenReturn(Collections.emptyList()); // ...ENTÃO retorne uma lista vazia.
+        when(avisoService.porData(dataSemAviso)).thenReturn(Collections.emptyList());
 
-        // 3. Executa e Verifica
         mvc.perform(get("/api/avisos")
                         .param("data", "2025-11-11")
                 )
-                .andExpect(status().isOk()) // Espera HTTP 200
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) // Espera um JSON
-                .andExpect(jsonPath("$", hasSize(0))); // Espera que a lista JSON esteja vazia
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    // --- TESTE DE VISUALIZAÇÃO (COMO CHEGAR) ---
+
+    @Test
+    void testarVisualizacaoComoChegarNaHome() throws Exception {
+        // 1. Preparar dados simulados
+        ComoChegar dadosAtualizados = new ComoChegar();
+        dadosAtualizados.setBarcoDescricao("Texto Novo do Barco");
+        dadosAtualizados.setCarroDescricao("Texto Novo do Carro");
+        dadosAtualizados.setCatamaraDescricao("Texto Novo do Catamarã");
+
+        // Preenche campos obrigatórios para evitar erro no template
+        dadosAtualizados.setBarcoPreco("R$ 10");
+        dadosAtualizados.setBarcoTempo("10 min");
+        dadosAtualizados.setBarcoBike("Sim");
+        dadosAtualizados.setCarroPasso1("P1");
+        dadosAtualizados.setCarroPasso2("P2");
+        dadosAtualizados.setCarroPasso3("P3");
+        dadosAtualizados.setCatamaraLink("http://link.com");
+
+        // Mock de Horário também é necessário pois a Home carrega ele
+        when(horarioService.getHorario()).thenReturn(new Horario());
+
+        // 2. Mock do serviço ComoChegar
+        when(comoChegarService.getComoChegar()).thenReturn(dadosAtualizados);
+
+        // 3. Executar a requisição GET na Home
+        mvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("comoChegar"))
+                // Verifica se o HTML final contém os textos definidos
+                .andExpect(content().string(containsString("Texto Novo do Barco")))
+                .andExpect(content().string(containsString("Texto Novo do Carro")))
+                .andExpect(content().string(containsString("Texto Novo do Catamarã")));
     }
 }
