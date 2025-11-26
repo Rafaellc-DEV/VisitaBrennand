@@ -746,12 +746,12 @@
                         <i class="bi bi-tsunami"></i>
                     </div>
                     <h6 class="transport-title">Travessia de Barco</h6>
-                    <p class="transport-desc">Saída do Marco Zero (Recife Antigo).</p>
+                    <p class="transport-desc" th:text="${comoChegar.barcoDescricao}">Descrição...</p>
 
                     <ul class="transport-details">
-                        <li><i class="bi bi-cash-coin"></i> <span>R$ 10,00 (ida e volta)</span></li>
-                        <li><i class="bi bi-clock"></i> <span>~5 minutos</span></li>
-                        <li><i class="bi bi-bicycle"></i> <span>Aceita bicicleta (+R$ 5)</span></li>
+                        <li><i class="bi bi-cash-coin"></i> <span th:text="${comoChegar.barcoPreco}">R$ ...</span></li>
+                        <li><i class="bi bi-clock"></i> <span th:text="${comoChegar.barcoTempo}">~Minutos</span></li>
+                        <li><i class="bi bi-bicycle"></i> <span th:text="${comoChegar.barcoBike}">Bike</span></li>
                     </ul>
                 </div>
 
@@ -760,12 +760,12 @@
                         <i class="bi bi-car-front"></i>
                     </div>
                     <h6 class="transport-title">Carro ou Uber</h6>
-                    <p class="transport-desc">Acesso por Brasília Teimosa.</p>
+                    <p class="transport-desc" th:text="${comoChegar.carroDescricao}">Acesso...</p>
 
                     <div class="transport-steps">
-                        <div class="step"><span class="num">1</span> Av. Brasília Formosa até o fim</div>
-                        <div class="step"><span class="num">2</span> Entre na rua do Mole do Porto</div>
-                        <div class="step"><span class="num">3</span> Estacionamento no local</div>
+                        <div class="step"><span class="num">1</span> <span th:text="${comoChegar.carroPasso1}">Passo 1</span></div>
+                        <div class="step"><span class="num">2</span> <span th:text="${comoChegar.carroPasso2}">Passo 2</span></div>
+                        <div class="step"><span class="num">3</span> <span th:text="${comoChegar.carroPasso3}">Passo 3</span></div>
                     </div>
                 </div>
 
@@ -774,10 +774,10 @@
                         <i class="bi bi-ticket-perforated"></i>
                     </div>
                     <h6 class="transport-title">Catamarã Tours</h6>
-                    <p class="transport-desc">Passeio turístico completo pelo rio.</p>
+                    <p class="transport-desc" th:text="${comoChegar.catamaraDescricao}">Passeio...</p>
 
                     <div style="margin-top: auto;">
-                        <a href="https://www.catamarantours.com.br" target="_blank" class="btn btn-outline-brand w-100 btn-sm">
+                        <a th:href="${comoChegar.catamaraLink}" target="_blank" class="btn btn-outline-brand w-100 btn-sm">
                             Ver Site Oficial <i class="bi bi-box-arrow-up-right ms-1"></i>
                         </a>
                     </div>
@@ -785,7 +785,6 @@
 
             </div>
         </section>
-
         <div class="alert-container">
             <div class="alert alert-success" th:if="${ok}" th:text="#{${ok}}" role="alert"></div>
             <div class="alert alert-danger" th:if="${erro}" th:text="${erro}" role="alert"></div>

@@ -1,69 +1,81 @@
 <!DOCTYPE html>
 <html th:replace="~{admin/base :: layout('Editar Como Chegar', ~{::section})}" xmlns:th="http://www.thymeleaf.org">
 <section>
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
     <style>
-        .editor-container { background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 24px; }
-        #editor { height: 350px; font-family: 'Inter', sans-serif; font-size: 16px; }
-        .editor-actions { margin-top: 16px; display: flex; justify-content: flex-end; gap: 10px; }
+        .section-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .section-title { font-weight: 700; color: var(--brand); margin-bottom: 16px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .form-label { font-weight: 600; font-size: 0.9rem; color: var(--muted); }
     </style>
 
-    <div class="container mt-4">
+    <div class="container mt-4" style="max-width: 800px;">
         <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
         <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-        <form id="form-conteudo" th:action="@{/admin/como-chegar}" th:object="${comoChegar}" method="post">
-            <div class="editor-container">
+        <form th:action="@{/admin/como-chegar}" th:object="${comoChegar}" method="post">
+
+            <div class="section-card">
+                <h5 class="section-title"><i class="bi bi-boat me-2"></i>Travessia de Barco</h5>
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Conteúdo Informativo</label>
-
-                    <div id="editor"></div>
-
-                    <input type="hidden" id="conteudo-hidden" th:field="*{conteudo}" />
-
-                    <div th:if="${#fields.hasErrors('conteudo')}" class="d-block invalid-feedback" th:errors="*{conteudo}"></div>
+                    <label class="form-label">Descrição (Ponto de partida)</label>
+                    <input type="text" class="form-control" th:field="*{barcoDescricao}" required>
                 </div>
-                <div class="editor-actions">
-                    <button type="submit" class="btn btn-primary" style="background-color: var(--brand);">Salvar Alterações</button>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Preço</label>
+                        <input type="text" class="form-control" th:field="*{barcoPreco}" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Tempo estimado</label>
+                        <input type="text" class="form-control" th:field="*{barcoTempo}" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Info Bicicleta</label>
+                        <input type="text" class="form-control" th:field="*{barcoBike}" required>
+                    </div>
                 </div>
+            </div>
+
+            <div class="section-card">
+                <h5 class="section-title"><i class="bi bi-car-front me-2"></i>Carro ou Uber</h5>
+                <div class="mb-3">
+                    <label class="form-label">Descrição Geral</label>
+                    <input type="text" class="form-control" th:field="*{carroDescricao}" required>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Passo a Passo</label>
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">1</span>
+                        <input type="text" class="form-control" th:field="*{carroPasso1}" placeholder="Passo 1" required>
+                    </div>
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">2</span>
+                        <input type="text" class="form-control" th:field="*{carroPasso2}" placeholder="Passo 2" required>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text">3</span>
+                        <input type="text" class="form-control" th:field="*{carroPasso3}" placeholder="Passo 3" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h5 class="section-title"><i class="bi bi-ticket-perforated me-2"></i>Catamarã Tours</h5>
+                <div class="mb-3">
+                    <label class="form-label">Descrição</label>
+                    <input type="text" class="form-control" th:field="*{catamaraDescricao}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Link do Site Oficial</label>
+                    <input type="url" class="form-control" th:field="*{catamaraLink}" required>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mb-5">
+                <button type="submit" class="btn btn-primary btn-lg" style="background-color: var(--brand);">
+                    <i class="bi bi-check-lg me-2"></i>Salvar Alterações
+                </button>
             </div>
         </form>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
-
-    <script th:inline="none">
-        document.addEventListener('DOMContentLoaded', function () {
-
-            // Configuração da Barra de Ferramentas
-            const toolbarOptions = [
-                ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['link', 'clean']
-            ];
-
-            // Inicializa o Quill
-            const quill = new Quill('#editor', {
-                theme: 'snow',
-                modules: { toolbar: toolbarOptions },
-                placeholder: 'Digite as informações de transporte, valores e rotas...'
-            });
-
-            // 1. Carrega o conteúdo inicial lendo direto do input hidden
-            // Isso evita erros de parsing do Thymeleaf
-            const hiddenInput = document.getElementById('conteudo-hidden');
-            if (hiddenInput.value) {
-                quill.clipboard.dangerouslyPasteHTML(hiddenInput.value);
-            }
-
-            // 2. Ao enviar o formulário, copia o HTML do editor de volta para o input
-            const form = document.getElementById('form-conteudo');
-            form.addEventListener('submit', function (e) {
-                // Sanitiza o HTML antes de enviar (segurança)
-                hiddenInput.value = DOMPurify.sanitize(quill.root.innerHTML);
-            });
-        });
-    </script>
 </section>
 </html>

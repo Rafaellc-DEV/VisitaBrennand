@@ -19,45 +19,20 @@ public class ComoChegarService {
         return repo.findById(ID_FIXO).orElseGet(() -> {
             ComoChegar novo = new ComoChegar();
 
-            // AQUI: O HTML NOVO (CARDS) VAI DENTRO DO JAVA
-            String conteudoPadrao = """
-                <div class="transport-grid">
-                    <div class="transport-card">
-                        <div class="transport-icon-box"><i class="bi bi-boat"></i></div>
-                        <h6 class="transport-title">Travessia de Barco</h6>
-                        <p class="transport-desc">Saída do Marco Zero (Recife Antigo).</p>
-                        <ul class="transport-details">
-                            <li><i class="bi bi-cash-coin"></i> <span>R$ 10,00 (ida e volta)</span></li>
-                            <li><i class="bi bi-clock"></i> <span>~5 minutos</span></li>
-                            <li><i class="bi bi-bicycle"></i> <span>Aceita bicicleta (+R$ 5)</span></li>
-                        </ul>
-                    </div>
+            // Valores padrão iniciais
+            novo.setBarcoDescricao("Saída do Marco Zero (Recife Antigo).");
+            novo.setBarcoPreco("R$ 10,00 (ida e volta)");
+            novo.setBarcoTempo("~5 minutos");
+            novo.setBarcoBike("Aceita bicicleta (+R$ 5)");
 
-                    <div class="transport-card">
-                        <div class="transport-icon-box"><i class="bi bi-car-front"></i></div>
-                        <h6 class="transport-title">Carro ou Uber</h6>
-                        <p class="transport-desc">Acesso por Brasília Teimosa.</p>
-                        <div class="transport-steps">
-                            <div class="step"><span class="num">1</span> Av. Brasília Formosa até o fim</div>
-                            <div class="step"><span class="num">2</span> Entre na rua do Mole do Porto</div>
-                            <div class="step"><span class="num">3</span> Estacionamento no local</div>
-                        </div>
-                    </div>
+            novo.setCarroDescricao("Acesso por Brasília Teimosa.");
+            novo.setCarroPasso1("Av. Brasília Formosa até o fim");
+            novo.setCarroPasso2("Entre na rua do Mole do Porto");
+            novo.setCarroPasso3("Estacionamento no local");
 
-                    <div class="transport-card">
-                        <div class="transport-icon-box"><i class="bi bi-ticket-perforated"></i></div>
-                        <h6 class="transport-title">Catamarã Tours</h6>
-                        <p class="transport-desc">Passeio turístico completo pelo rio.</p>
-                        <div style="margin-top: auto;">
-                            <a href="https://www.catamarantours.com.br" target="_blank" class="btn btn-outline-brand w-100 btn-sm">
-                                Ver Site Oficial <i class="bi bi-box-arrow-up-right ms-1"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            """;
+            novo.setCatamaraDescricao("Passeio turístico completo pelo rio.");
+            novo.setCatamaraLink("https://www.catamarantours.com.br");
 
-            novo.setConteudo(conteudoPadrao);
             novo.setAtualizadoEm(LocalDateTime.now());
             return repo.save(novo);
         });
