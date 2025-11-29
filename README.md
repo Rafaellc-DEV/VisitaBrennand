@@ -37,7 +37,7 @@ A solução proposta busca centralizar **feedbacks, avisos e indicadores de gest
     <img src="https://img.shields.io/badge/Screencast LowFi-b50404?style=for-the-badge&logo=youtube&logoColor=white"/>
     <a href="https://www.youtube.com/shorts/nozgQd4LdiM">
     <img src="https://img.shields.io/badge/Screencast SR1-b50404?style=for-the-badge&logo=youtube&logoColor=white"/>
-    <a href="https://www.colocaraqui">
+    <a href="https://youtu.be/I5k4-P-8aLs">
     <img src="https://img.shields.io/badge/Screencast SR2-b50404?style=for-the-badge&logo=youtube&logoColor=white"/>
     <a href="https://youtu.be/wfDGipw1Y3k">
     <img src="https://img.shields.io/badge/Screencast Testes Automatizados-b50404?style=for-the-badge&logo=youtube&logoColor=white"/>
